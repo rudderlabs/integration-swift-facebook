@@ -237,10 +237,12 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
 
         LoggerAnalytics.debug("Facebook: Screen event '\(eventName)' logged")
     }
+}
 
-    // MARK: - Utility Methods
+// MARK: - FacebookIntegration Utility Methods Extension
+private extension FacebookIntegration {
 
-    private func getFacebookEventName(_ event: String) -> String {
+    func getFacebookEventName(_ event: String) -> String {
         // Map common ecommerce events to Facebook standard events
         switch event {
         case ECommerceEvents.productsSearched:
@@ -282,7 +284,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         }
     }
 
-    private func handleCustomProperties(properties: [String: Any], params: inout [AppEvents.ParameterName: Any], isScreenEvent: Bool) {
+    func handleCustomProperties(properties: [String: Any], params: inout [AppEvents.ParameterName: Any], isScreenEvent: Bool) {
         for (key, value) in properties {
             // Skip reserved keywords for track events (but not screen events)
             if !isScreenEvent && trackReservedKeywords.contains(key) {
@@ -300,7 +302,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         }
     }
 
-    private func handleStandardProperties(properties: [String: Any], params: inout [AppEvents.ParameterName: Any], eventName: String) {
+    func handleStandardProperties(properties: [String: Any], params: inout [AppEvents.ParameterName: Any], eventName: String) {
         // Map standard ecommerce properties to Facebook parameters
         if let productId = properties[ECommerceParamNames.productId] {
             params[AppEvents.ParameterName.contentID] = String(describing: productId)
@@ -332,7 +334,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         }
     }
 
-    private func getValueToSum(from properties: [String: Any], key: String) -> Double? {
+    func getValueToSum(from properties: [String: Any], key: String) -> Double? {
         guard let value = properties[key] else { return nil }
 
         if let numberValue = value as? NSNumber {
@@ -344,7 +346,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         return nil
     }
 
-    private func extractCurrency(from properties: [String: Any], key: String) -> String {
+    func extractCurrency(from properties: [String: Any], key: String) -> String {
         // Case-insensitive search for currency key
         for (propertyKey, value) in properties {
             if propertyKey.caseInsensitiveCompare(key) == .orderedSame {
