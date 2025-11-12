@@ -21,6 +21,25 @@ import RudderStackAnalytics
  */
 public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
 
+    // MARK: - Adapters
+    final var appEventsAdapter: FacebookAppEventsAdapter
+    final let settingsAdapter: FacebookSettingsAdapter
+
+    internal init(
+        appEventsAdapter: FacebookAppEventsAdapter,
+        settingsAdapter: FacebookSettingsAdapter
+    ) {
+        self.appEventsAdapter = appEventsAdapter
+        self.settingsAdapter = settingsAdapter
+    }
+
+    public convenience init() {
+        self.init(
+            appEventsAdapter: DefaultFacebookAppEventsAdapter(),
+            settingsAdapter: DefaultFacebookSettingsAdapter()
+        )
+    }
+
     // MARK: - Plugin Properties
     public var pluginType: PluginType = .terminal
     public var analytics: Analytics?
@@ -39,7 +58,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
     // MARK: - IntegrationPlugin Required Methods
 
     public func getDestinationInstance() -> Any? {
-        return AppEvents.shared
+        return appEventsAdapter.getAppEventsInstance()
     }
 
     public func create(destinationConfig: [String: Any]) throws {
@@ -60,10 +79,10 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
 
         // Configure Facebook data processing options
         if self.limitedDataUse {
-            Settings.shared.setDataProcessingOptions(["LDU"], country: Int32(self.dpoCountry), state: Int32(self.dpoState))
+            settingsAdapter.setDataProcessingOptions(["LDU"], country: Int32(self.dpoCountry), state: Int32(self.dpoState))
             LoggerAnalytics.debug("Facebook: setDataProcessingOptions:[LDU] country:\(self.dpoCountry) state:\(self.dpoState)")
         } else {
-            Settings.shared.setDataProcessingOptions([])
+            settingsAdapter.setDataProcessingOptions([])
             LoggerAnalytics.debug("Facebook: setDataProcessingOptions:[]")
         }
 
@@ -73,8 +92,8 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
     // MARK: - Optional IntegrationPlugin Methods
 
     public func reset() {
-        AppEvents.shared.userID = nil
-        AppEvents.shared.clearUserData()
+        appEventsAdapter.userID = nil
+        appEventsAdapter.clearUserData()
         LoggerAnalytics.debug("Facebook: User data reset")
     }
 
@@ -87,7 +106,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
     public func identify(payload: IdentifyEvent) {
         // Set user ID
         if let userId = payload.userId {
-            AppEvents.shared.userID = userId
+            appEventsAdapter.userID = userId
             LoggerAnalytics.debug("Facebook: Set user ID: \(userId)")
         }
 
@@ -99,45 +118,45 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
 
         // Set user data properties
         if let email = traits["email"] as? String {
-            AppEvents.shared.setUserData(email, forType: .email)
+            appEventsAdapter.setUserData(email, forType: .email)
         }
 
         if let firstName = traits["firstName"] as? String {
-            AppEvents.shared.setUserData(firstName, forType: .firstName)
+            appEventsAdapter.setUserData(firstName, forType: .firstName)
         }
 
         if let lastName = traits["lastName"] as? String {
-            AppEvents.shared.setUserData(lastName, forType: .lastName)
+            appEventsAdapter.setUserData(lastName, forType: .lastName)
         }
 
         if let phone = traits["phone"] as? String {
-            AppEvents.shared.setUserData(phone, forType: .phone)
+            appEventsAdapter.setUserData(phone, forType: .phone)
         }
 
         if let birthday = traits["birthday"] as? String {
-            AppEvents.shared.setUserData(birthday, forType: .dateOfBirth)
+            appEventsAdapter.setUserData(birthday, forType: .dateOfBirth)
         }
 
         if let gender = traits["gender"] as? String {
-            AppEvents.shared.setUserData(gender, forType: .gender)
+            appEventsAdapter.setUserData(gender, forType: .gender)
         }
 
         // Handle address properties
         if let address = traits["address"] as? [String: Any] {
             if let city = address["city"] as? String {
-                AppEvents.shared.setUserData(city, forType: .city)
+                appEventsAdapter.setUserData(city, forType: .city)
             }
 
             if let state = address["state"] as? String {
-                AppEvents.shared.setUserData(state, forType: .state)
+                appEventsAdapter.setUserData(state, forType: .state)
             }
 
             if let postalCode = address["postalcode"] as? String {
-                AppEvents.shared.setUserData(postalCode, forType: .zip)
+                appEventsAdapter.setUserData(postalCode, forType: .zip)
             }
 
             if let country = address["country"] as? String {
-                AppEvents.shared.setUserData(country, forType: .country)
+                appEventsAdapter.setUserData(country, forType: .country)
             }
         }
 
@@ -169,27 +188,27 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
              AppEvents.Name.viewedContent.rawValue:
             handleStandardProperties(properties: properties, params: &params, eventName: facebookEventName)
             if let price = getValueToSum(from: properties, key: ECommerceParamNames.price) {
-                AppEvents.shared.logEvent(AppEvents.Name(rawValue: facebookEventName), valueToSum: price, parameters: params)
+                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), valueToSum: price, parameters: params)
             } else {
-                AppEvents.shared.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
             }
 
         case AppEvents.Name.initiatedCheckout.rawValue,
              AppEvents.Name.spentCredits.rawValue:
             handleStandardProperties(properties: properties, params: &params, eventName: facebookEventName)
             if let value = getValueToSum(from: properties, key: "value") {
-                AppEvents.shared.logEvent(AppEvents.Name(rawValue: facebookEventName), valueToSum: value, parameters: params)
+                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), valueToSum: value, parameters: params)
             } else {
-                AppEvents.shared.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
             }
 
         case "Order Completed": // Special handling for purchases
             handleStandardProperties(properties: properties, params: &params, eventName: facebookEventName)
             if let revenue = getValueToSum(from: properties, key: ECommerceParamNames.revenue) {
                 let currency = extractCurrency(from: properties, key: ECommerceParamNames.currency)
-                AppEvents.shared.logPurchase(amount: revenue, currency: currency, parameters: params)
+                appEventsAdapter.logPurchase(amount: revenue, currency: currency, parameters: params)
             } else {
-                AppEvents.shared.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
             }
 
         case AppEvents.Name.searched.rawValue,
@@ -204,11 +223,11 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
              AppEvents.Name.adImpression.rawValue,
              AppEvents.Name.rated.rawValue:
             handleStandardProperties(properties: properties, params: &params, eventName: facebookEventName)
-            AppEvents.shared.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+            appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
 
         default:
             // Custom event
-            AppEvents.shared.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+            appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
         }
 
         LoggerAnalytics.debug("Facebook: Track event '\(facebookEventName)' logged")
@@ -233,7 +252,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         var params: [AppEvents.ParameterName: Any] = [:]
         handleCustomProperties(properties: properties, params: &params, isScreenEvent: true)
 
-        AppEvents.shared.logEvent(AppEvents.Name(rawValue: eventName), parameters: params)
+        appEventsAdapter.logEvent(AppEvents.Name(rawValue: eventName), parameters: params)
 
         LoggerAnalytics.debug("Facebook: Screen event '\(eventName)' logged")
     }
