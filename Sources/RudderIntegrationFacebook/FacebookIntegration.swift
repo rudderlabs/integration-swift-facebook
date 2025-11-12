@@ -80,13 +80,13 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         // Configure Facebook data processing options
         if self.limitedDataUse {
             settingsAdapter.setDataProcessingOptions(["LDU"], country: Int32(self.dpoCountry), state: Int32(self.dpoState))
-            LoggerAnalytics.debug("Facebook: setDataProcessingOptions:[LDU] country:\(self.dpoCountry) state:\(self.dpoState)")
+            LoggerAnalytics.debug("FacebookIntegration: Data processing options set to [LDU] with country: \(self.dpoCountry), state: \(self.dpoState)")
         } else {
             settingsAdapter.setDataProcessingOptions([])
-            LoggerAnalytics.debug("Facebook: setDataProcessingOptions:[]")
+            LoggerAnalytics.debug("FacebookIntegration: Data processing options cleared (no LDU restrictions)")
         }
 
-        LoggerAnalytics.debug("Facebook App Events integration initialized successfully")
+        LoggerAnalytics.debug("FacebookIntegration: Integration initialized successfully")
     }
 
     // MARK: - Optional IntegrationPlugin Methods
@@ -94,11 +94,11 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
     public func reset() {
         appEventsAdapter.userID = nil
         appEventsAdapter.clearUserData()
-        LoggerAnalytics.debug("Facebook: User data reset")
+        LoggerAnalytics.debug("FacebookIntegration: User data and ID reset successfully")
     }
 
     public func flush() {
-        LoggerAnalytics.debug("Facebook App Events Factory doesn't support Flush Call")
+        LoggerAnalytics.debug("FacebookIntegration: Flush operation not supported by Facebook App Events")
     }
 
     // MARK: - Event Handling Methods
@@ -107,12 +107,12 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         // Set user ID
         if let userId = payload.userId {
             appEventsAdapter.userID = userId
-            LoggerAnalytics.debug("Facebook: Set user ID: \(userId)")
+            LoggerAnalytics.debug("FacebookIntegration: Setting userId to Facebook App Events")
         }
 
         // Extract traits dictionary
         guard let traits = payload.traits?.dictionary?.rawDictionary else {
-            LoggerAnalytics.debug("Facebook: No traits found in identify event")
+            LoggerAnalytics.debug("FacebookIntegration: No traits found in identify event - skipping user data update")
             return
         }
 
@@ -160,12 +160,12 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
             }
         }
 
-        LoggerAnalytics.debug("Facebook: Identify event processed with user data")
+        LoggerAnalytics.debug("FacebookIntegration: Identify event processed successfully with user data")
     }
 
     public func track(payload: TrackEvent) {
         guard !payload.event.isEmpty else {
-            LoggerAnalytics.debug("Facebook: Track event missing event name")
+            LoggerAnalytics.debug("FacebookIntegration: Track event missing event name - event dropped")
             return
         }
         let eventName = payload.event
@@ -189,8 +189,10 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
             handleStandardProperties(properties: properties, params: &params, eventName: facebookEventName)
             if let price = getValueToSum(from: properties, key: ECommerceParamNames.price) {
                 appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), valueToSum: price, parameters: params)
+                LoggerAnalytics.debug("FacebookIntegration: Logged \"\(facebookEventName)\" to Facebook with price: \(price) and properties: \(properties)")
             } else {
                 appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+                LoggerAnalytics.debug("FacebookIntegration: Logged \"\(facebookEventName)\" to Facebook with properties: \(properties)")
             }
 
         case AppEvents.Name.initiatedCheckout.rawValue,
@@ -198,8 +200,10 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
             handleStandardProperties(properties: properties, params: &params, eventName: facebookEventName)
             if let value = getValueToSum(from: properties, key: "value") {
                 appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), valueToSum: value, parameters: params)
+                LoggerAnalytics.debug("FacebookIntegration: Logged \"\(facebookEventName)\" to Facebook with value: \(value) and properties: \(properties)")
             } else {
                 appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+                LoggerAnalytics.debug("FacebookIntegration: Logged \"\(facebookEventName)\" to Facebook with properties: \(properties)")
             }
 
         case "Order Completed": // Special handling for purchases
@@ -207,8 +211,10 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
             if let revenue = getValueToSum(from: properties, key: ECommerceParamNames.revenue) {
                 let currency = extractCurrency(from: properties, key: ECommerceParamNames.currency)
                 appEventsAdapter.logPurchase(amount: revenue, currency: currency, parameters: params)
+                LoggerAnalytics.debug("FacebookIntegration: Logged purchase to Facebook with revenue: \(revenue), currency: \(currency) and properties: \(properties)")
             } else {
                 appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+                LoggerAnalytics.debug("FacebookIntegration: Logged \"\(facebookEventName)\" to Facebook with properties: \(properties)")
             }
 
         case AppEvents.Name.searched.rawValue,
@@ -224,18 +230,18 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
              AppEvents.Name.rated.rawValue:
             handleStandardProperties(properties: properties, params: &params, eventName: facebookEventName)
             appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+            LoggerAnalytics.debug("FacebookIntegration: Logged \"\(facebookEventName)\" to Facebook with properties: \(properties)")
 
         default:
             // Custom event
             appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+            LoggerAnalytics.debug("FacebookIntegration: Logged custom event \"\(facebookEventName)\" to Facebook with properties: \(properties)")
         }
-
-        LoggerAnalytics.debug("Facebook: Track event '\(facebookEventName)' logged")
     }
 
     public func screen(payload: ScreenEvent) {
         guard !payload.event.isEmpty else {
-            LoggerAnalytics.debug("Facebook: Screen event missing screen name")
+            LoggerAnalytics.debug("FacebookIntegration: Screen event missing screen name - event dropped")
             return
         }
         let screenName = payload.event
@@ -254,7 +260,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
 
         appEventsAdapter.logEvent(AppEvents.Name(rawValue: eventName), parameters: params)
 
-        LoggerAnalytics.debug("Facebook: Screen event '\(eventName)' logged")
+        LoggerAnalytics.debug("FacebookIntegration: Logged screen view \"\(eventName)\" to Facebook with properties: \(properties)")
     }
 }
 
