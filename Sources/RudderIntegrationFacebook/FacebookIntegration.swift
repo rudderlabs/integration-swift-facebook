@@ -32,8 +32,8 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
     private var dpoCountry: Int = 0
     private let supportedEvents: [String] = ["identify", "track", "screen"]
     private let trackReservedKeywords: [String] = [
-        "product_id", "rating", "name", "order_id", "currency",
-        "description", "query", "value", "price", "revenue"
+        ECommerceParamNames.productId, ECommerceParamNames.rating, "name", ECommerceParamNames.orderId, ECommerceParamNames.currency,
+        "description", ECommerceParamNames.query, "value", ECommerceParamNames.price, ECommerceParamNames.revenue
     ]
 
     // MARK: - IntegrationPlugin Required Methods
@@ -168,7 +168,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
              AppEvents.Name.addedToWishlist.rawValue,
              AppEvents.Name.viewedContent.rawValue:
             handleStandardProperties(properties: properties, params: &params, eventName: facebookEventName)
-            if let price = getValueToSum(from: properties, key: "price") {
+            if let price = getValueToSum(from: properties, key: ECommerceParamNames.price) {
                 AppEvents.shared.logEvent(AppEvents.Name(rawValue: facebookEventName), valueToSum: price, parameters: params)
             } else {
                 AppEvents.shared.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
@@ -185,8 +185,8 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
 
         case "Order Completed": // Special handling for purchases
             handleStandardProperties(properties: properties, params: &params, eventName: facebookEventName)
-            if let revenue = getValueToSum(from: properties, key: "revenue") {
-                let currency = extractCurrency(from: properties, key: "currency")
+            if let revenue = getValueToSum(from: properties, key: ECommerceParamNames.revenue) {
+                let currency = extractCurrency(from: properties, key: ECommerceParamNames.currency)
                 AppEvents.shared.logPurchase(amount: revenue, currency: currency, parameters: params)
             } else {
                 AppEvents.shared.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
@@ -243,17 +243,17 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
     private func getFacebookEventName(_ event: String) -> String {
         // Map common ecommerce events to Facebook standard events
         switch event {
-        case "Products Searched":
+        case ECommerceEvents.productsSearched:
             return AppEvents.Name.searched.rawValue
-        case "Product Viewed":
+        case ECommerceEvents.productViewed:
             return AppEvents.Name.viewedContent.rawValue
-        case "Product Added":
+        case ECommerceEvents.productAdded:
             return AppEvents.Name.addedToCart.rawValue
-        case "Product Added to Wishlist":
+        case ECommerceEvents.productAddedToWishList:
             return AppEvents.Name.addedToWishlist.rawValue
-        case "Payment Info Entered":
+        case ECommerceEvents.paymentInfoEntered:
             return AppEvents.Name.addedPaymentInfo.rawValue
-        case "Checkout Started":
+        case ECommerceEvents.checkoutStarted:
             return AppEvents.Name.initiatedCheckout.rawValue
         case "Complete Registration":
             return AppEvents.Name.completedRegistration.rawValue
@@ -267,15 +267,15 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
             return AppEvents.Name.subscribe.rawValue
         case "Start Trial":
             return AppEvents.Name.startTrial.rawValue
-        case "Promotion Clicked":
+        case ECommerceEvents.promotionClicked:
             return AppEvents.Name.adClick.rawValue
-        case "Promotion Viewed":
+        case ECommerceEvents.promotionViewed:
             return AppEvents.Name.adImpression.rawValue
         case "Spend Credits":
             return AppEvents.Name.spentCredits.rawValue
-        case "Product Reviewed":
+        case ECommerceEvents.productReviewed:
             return AppEvents.Name.rated.rawValue
-        case "Order Completed":
+        case ECommerceEvents.orderCompleted:
             return "Order Completed" // Special handling for purchases
         default:
             return event
@@ -302,11 +302,11 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
 
     private func handleStandardProperties(properties: [String: Any], params: inout [AppEvents.ParameterName: Any], eventName: String) {
         // Map standard ecommerce properties to Facebook parameters
-        if let productId = properties["product_id"] {
+        if let productId = properties[ECommerceParamNames.productId] {
             params[AppEvents.ParameterName.contentID] = String(describing: productId)
         }
 
-        if let rating = properties["rating"] as? NSNumber {
+        if let rating = properties[ECommerceParamNames.rating] as? NSNumber {
             params[AppEvents.ParameterName.maxRatingValue] = rating
         }
 
@@ -314,20 +314,20 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
             params[AppEvents.ParameterName.adType] = String(describing: name)
         }
 
-        if let orderId = properties["order_id"] {
+        if let orderId = properties[ECommerceParamNames.orderId] {
             params[AppEvents.ParameterName.orderID] = String(describing: orderId)
         }
 
         // For Purchase event, currency is handled separately
         if eventName != "Order Completed" {
-            params[AppEvents.ParameterName.currency] = extractCurrency(from: properties, key: "currency")
+            params[AppEvents.ParameterName.currency] = extractCurrency(from: properties, key: ECommerceParamNames.currency)
         }
 
         if let description = properties["description"] {
             params[AppEvents.ParameterName.description] = String(describing: description)
         }
 
-        if let query = properties["query"] {
+        if let query = properties[ECommerceParamNames.query] {
             params[AppEvents.ParameterName.searchString] = String(describing: query)
         }
     }
