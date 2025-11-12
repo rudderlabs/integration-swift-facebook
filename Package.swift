@@ -21,7 +21,8 @@ let package = Package(
     dependencies: [
         // Dependencies declare other packages that this package depends on.
         .package(url: "https://github.com/facebook/facebook-ios-sdk", .upToNextMajor(from: "18.0.0")),
-        .package(url: "https://github.com/rudderlabs/rudder-sdk-swift.git", branch: "chore/test-firebase-integration")
+        // todo: update the rudder-sdk-swift dependency after stable release
+        .package(url: "https://github.com/rudderlabs/rudder-sdk-swift.git", branch: "feat/sdk-502-make-standard-integration-public")
     ],
     targets: [
         // Targets are the basic building blocks of a package, defining a module or a test suite.
