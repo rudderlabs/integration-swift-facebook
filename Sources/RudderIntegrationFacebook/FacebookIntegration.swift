@@ -62,34 +62,14 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
     }
 
     public func create(destinationConfig: [String: Any]) throws {
-        // Initialize configuration from destination config
-        self.limitedDataUse = destinationConfig["limitedDataUse"] as? Bool ?? false
-        self.dpoState = destinationConfig["dpoState"] as? Int ?? 0
-        self.dpoCountry = destinationConfig["dpoCountry"] as? Int ?? 0
-
-        // Validate DPO state (0 or 1000 only)
-        if self.dpoState != 0 && self.dpoState != 1000 {
-            self.dpoState = 0
-        }
-
-        // Validate DPO country (0 or 1 only)  
-        if self.dpoCountry != 0 && self.dpoCountry != 1 {
-            self.dpoCountry = 0
-        }
-
-        // Configure Facebook data processing options
-        if self.limitedDataUse {
-            settingsAdapter.setDataProcessingOptions(["LDU"], country: Int32(self.dpoCountry), state: Int32(self.dpoState))
-            LoggerAnalytics.debug("FacebookIntegration: Data processing options set to [LDU] with country: \(self.dpoCountry), state: \(self.dpoState)")
-        } else {
-            settingsAdapter.setDataProcessingOptions([])
-            LoggerAnalytics.debug("FacebookIntegration: Data processing options cleared (no LDU restrictions)")
-        }
-
-        LoggerAnalytics.debug("FacebookIntegration: Integration initialized successfully")
+        configureDataProcessingOptions(from: destinationConfig, isUpdate: false)
     }
 
     // MARK: - Optional IntegrationPlugin Methods
+    
+    public func update(destinationConfig: [String: Any]) throws {
+        configureDataProcessingOptions(from: destinationConfig, isUpdate: true)
+    }
 
     public func reset() {
         appEventsAdapter.userID = nil
@@ -257,6 +237,42 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         appEventsAdapter.logEvent(AppEvents.Name(rawValue: eventName), parameters: params)
 
         LoggerAnalytics.debug("FacebookIntegration: Logged screen view \"\(eventName)\" to Facebook with properties: \(properties)")
+    }
+}
+
+// MARK: - FacebookIntegration Private Methods
+private extension FacebookIntegration {
+    
+    func configureDataProcessingOptions(from destinationConfig: [String: Any], isUpdate: Bool) {
+        // Extract configuration from destination config
+        let limitedDataUse = destinationConfig["limitedDataUse"] as? Bool ?? false
+        let dpoState = destinationConfig["dpoState"] as? Int ?? 0
+        let dpoCountry = destinationConfig["dpoCountry"] as? Int ?? 0
+
+        // Validate DPO state (0 or 1000 only)
+        let validatedDpoState = (dpoState == 0 || dpoState == 1000) ? dpoState : 0
+        
+        // Validate DPO country (0 or 1 only)
+        let validatedDpoCountry = (dpoCountry == 0 || dpoCountry == 1) ? dpoCountry : 0
+
+        // Update instance variables
+        self.limitedDataUse = limitedDataUse
+        self.dpoState = validatedDpoState
+        self.dpoCountry = validatedDpoCountry
+
+        // Configure Facebook data processing options
+        if self.limitedDataUse {
+            settingsAdapter.setDataProcessingOptions(["LDU"], country: Int32(self.dpoCountry), state: Int32(self.dpoState))
+            let actionWord = isUpdate ? "Updated" : ""
+            LoggerAnalytics.debug("FacebookIntegration: \(actionWord) data processing options \(isUpdate ? "to" : "set to") [LDU] with country: \(self.dpoCountry), state: \(self.dpoState)")
+        } else {
+            settingsAdapter.setDataProcessingOptions([])
+            let actionWord = isUpdate ? "Updated" : ""
+            LoggerAnalytics.debug("FacebookIntegration: \(actionWord) data processing options cleared (no LDU restrictions)")
+        }
+
+        let successMessage = isUpdate ? "Integration configuration updated successfully" : "Integration initialized successfully"
+        LoggerAnalytics.debug("FacebookIntegration: \(successMessage)")
     }
 }
 
