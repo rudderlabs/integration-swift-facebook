@@ -17,14 +17,10 @@ let package = Package(
         )
     ],
     dependencies: [
-        .package(
-            url: "https://github.com/facebook/facebook-ios-sdk",
-            .upToNextMajor(from: "18.0.0")
-        ),
-        .package(
-            url: "https://github.com/rudderlabs/rudder-sdk-swift.git",
-            branch: "chore/test-firebase-integration"
-        )
+        // Dependencies declare other packages that this package depends on.
+        .package(url: "https://github.com/facebook/facebook-ios-sdk", .upToNextMajor(from: "18.0.0")),
+        // todo: update the rudder-sdk-swift dependency after stable release
+        .package(url: "https://github.com/rudderlabs/rudder-sdk-swift.git", branch: "feat/sdk-502-make-standard-integration-public")
     ],
     targets: [
         .target(
