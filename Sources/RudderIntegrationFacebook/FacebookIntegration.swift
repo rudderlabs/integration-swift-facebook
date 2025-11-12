@@ -97,10 +97,6 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         LoggerAnalytics.debug("FacebookIntegration: User data and ID reset successfully")
     }
 
-    public func flush() {
-        LoggerAnalytics.debug("FacebookIntegration: Flush operation not supported by Facebook App Events")
-    }
-
     // MARK: - Event Handling Methods
 
     public func identify(payload: IdentifyEvent) {
