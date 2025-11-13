@@ -21,7 +21,7 @@ class DefaultFacebookSettingsAdapter: FacebookSettingsAdapter {
     func setDataProcessingOptions(_ options: [String]) {
         Settings.shared.setDataProcessingOptions(options)
     }
-    
+
     func setDataProcessingOptions(_ options: [String], country: Int32, state: Int32) {
         Settings.shared.setDataProcessingOptions(options, country: country, state: state)
     }

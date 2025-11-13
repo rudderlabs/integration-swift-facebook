@@ -66,7 +66,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
     }
 
     // MARK: - Optional IntegrationPlugin Methods
-    
+
     public func update(destinationConfig: [String: Any]) throws {
         configureDataProcessingOptions(from: destinationConfig, isUpdate: true)
     }
@@ -86,8 +86,8 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
             LoggerAnalytics.debug("FacebookIntegration: Setting userId to Facebook App Events")
         }
 
-        // Extract traits dictionary
-        guard let traits = payload.traits?.dictionary?.rawDictionary else {
+        // extract the traits dictionary
+        guard let traits = (payload.context?["traits"] as? AnyCodable)?.value as? [String: Any] else {
             LoggerAnalytics.debug("FacebookIntegration: No traits found in identify event - skipping user data update")
             return
         }
@@ -242,7 +242,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
 
 // MARK: - FacebookIntegration Private Methods
 private extension FacebookIntegration {
-    
+
     func configureDataProcessingOptions(from destinationConfig: [String: Any], isUpdate: Bool) {
         // Extract configuration from destination config
         let limitedDataUse = destinationConfig["limitedDataUse"] as? Bool ?? false
@@ -251,7 +251,7 @@ private extension FacebookIntegration {
 
         // Validate DPO state (0 or 1000 only)
         let validatedDpoState = (dpoState == 0 || dpoState == 1000) ? dpoState : 0
-        
+
         // Validate DPO country (0 or 1 only)
         let validatedDpoCountry = (dpoCountry == 0 || dpoCountry == 1) ? dpoCountry : 0
 
