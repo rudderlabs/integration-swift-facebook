@@ -13,6 +13,7 @@ import FacebookCore
  * Mock implementation for FacebookAppEventsAdapter
  */
 class MockFacebookAppEventsAdapter: FacebookAppEventsAdapter {
+    var appEventsInstance: Any?
     var userID: String?
     var clearUserDataCalled = false
     var setUserDataCalls: [(value: String, type: FBSDKAppEventUserDataType)] = []
@@ -48,7 +49,7 @@ class MockFacebookAppEventsAdapter: FacebookAppEventsAdapter {
         logPurchaseCalls.append((amount: amount, currency: currency, parameters: paramDict))
     }
 
-    func getAppEventsInstance() -> Any? {
+    func provideAppEventsInstance() -> Any {
         return "MockAppEventsInstance"
     }
 }
