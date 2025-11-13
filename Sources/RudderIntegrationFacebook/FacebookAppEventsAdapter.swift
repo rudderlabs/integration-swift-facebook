@@ -12,47 +12,54 @@ import FacebookCore
  * Protocol to wrap Facebook AppEvents.
  */
 protocol FacebookAppEventsAdapter {
+    var appEventsInstance: Any? { get set }
     var userID: String? { get set }
     func clearUserData()
     func setUserData(_ value: String, forType: FBSDKAppEventUserDataType)
     func logEvent(_ name: AppEvents.Name, valueToSum: Double, parameters: [AppEvents.ParameterName: Any])
     func logEvent(_ name: AppEvents.Name, parameters: [AppEvents.ParameterName: Any])
     func logPurchase(amount: Double, currency: String, parameters: [AppEvents.ParameterName: Any])
-    func getAppEventsInstance() -> Any?
+    func provideAppEventsInstance() -> Any
 }
 
 // MARK: Actual Implementation
 class DefaultFacebookAppEventsAdapter: FacebookAppEventsAdapter {
+    var appEventsInstance: Any?
+    
+    private var appEvents: AppEvents? {
+        return appEventsInstance as? AppEvents
+    }
+    
     var userID: String? {
         get {
-            return AppEvents.shared.userID
+            return appEvents?.userID
         }
         set {
-            AppEvents.shared.userID = newValue
+            appEvents?.userID = newValue
         }
     }
 
     func clearUserData() {
-        AppEvents.shared.clearUserData()
+        appEvents?.clearUserData()
     }
 
     func setUserData(_ value: String, forType: FBSDKAppEventUserDataType) {
-        AppEvents.shared.setUserData(value, forType: forType)
+        appEvents?.setUserData(value, forType: forType)
     }
 
     func logEvent(_ name: AppEvents.Name, valueToSum: Double, parameters: [AppEvents.ParameterName: Any]) {
-        AppEvents.shared.logEvent(name, valueToSum: valueToSum, parameters: parameters)
+        appEvents?.logEvent(name, valueToSum: valueToSum, parameters: parameters)
     }
 
     func logEvent(_ name: AppEvents.Name, parameters: [AppEvents.ParameterName: Any]) {
-        AppEvents.shared.logEvent(name, parameters: parameters)
+        appEvents?.logEvent(name, parameters: parameters)
     }
 
     func logPurchase(amount: Double, currency: String, parameters: [AppEvents.ParameterName: Any]) {
-        AppEvents.shared.logPurchase(amount: amount, currency: currency, parameters: parameters)
+        appEvents?.logPurchase(amount: amount, currency: currency, parameters: parameters)
     }
 
-    func getAppEventsInstance() -> Any? {
+    func provideAppEventsInstance() -> Any {
         return AppEvents.shared
     }
 }

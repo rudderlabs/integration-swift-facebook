@@ -111,11 +111,35 @@ struct FacebookIntegrationTests {
     func testGetDestinationInstance() throws {
         let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
 
+        // Before create is called, should return nil
+        let instanceBeforeCreate = integration.getDestinationInstance()
+        #expect(instanceBeforeCreate == nil)
+
         let config: [String: Any] = ["limitedDataUse": false]
         try integration.create(destinationConfig: config)
 
+        // After create is called, should return the app events instance
         let instance = integration.getDestinationInstance()
         #expect(instance as? String == "MockAppEventsInstance")
+        #expect(mockAppEvents.appEventsInstance as? String == "MockAppEventsInstance")
+    }
+
+    @Test("Given integration is created multiple times, when create is called, then app events instance is only set once")
+    func testCreate_multipleCallsOnlySetInstanceOnce() throws {
+        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+
+        let config: [String: Any] = ["limitedDataUse": false]
+        
+        // First call should set the instance
+        try integration.create(destinationConfig: config)
+        #expect(mockAppEvents.appEventsInstance as? String == "MockAppEventsInstance")
+        
+        // Modify the instance to verify it's not overwritten
+        mockAppEvents.appEventsInstance = "ModifiedInstance"
+        
+        // Second call should not overwrite the instance
+        try integration.create(destinationConfig: config)
+        #expect(mockAppEvents.appEventsInstance as? String == "ModifiedInstance")
     }
 
     @Test("Given integration config is updated, when update is called, then data processing options are updated")
