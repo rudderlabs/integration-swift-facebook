@@ -7,21 +7,19 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		85B76F342EC6171100C81A6D /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 85B76F312EC6171100C81A6D /* Assets.xcassets */; };
+		85B76F352EC6171100C81A6D /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B76F322EC6171100C81A6D /* ContentView.swift */; };
+		85B76F362EC6171100C81A6D /* FacebookExampleApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 85B76F332EC6171100C81A6D /* FacebookExampleApp.swift */; };
 		85FDDB872EC4ED1200CEF4B7 /* RudderIntegrationFacebook in Frameworks */ = {isa = PBXBuildFile; productRef = 85FDDB862EC4ED1200CEF4B7 /* RudderIntegrationFacebook */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		85B76F312EC6171100C81A6D /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		85B76F322EC6171100C81A6D /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
+		85B76F332EC6171100C81A6D /* FacebookExampleApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FacebookExampleApp.swift; sourceTree = "<group>"; };
 		85FDDB772EC4EC9100CEF4B7 /* FacebookExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = FacebookExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		85FDDBAA2EC5C17D00CEF4B7 /* FacebookExample-Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = "FacebookExample-Info.plist"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
-
-/* Begin PBXFileSystemSynchronizedRootGroup section */
-		85FDDB792EC4EC9100CEF4B7 /* Example */ = {
-			isa = PBXFileSystemSynchronizedRootGroup;
-			path = Example;
-			sourceTree = "<group>";
-		};
-/* End PBXFileSystemSynchronizedRootGroup section */
 
 /* Begin PBXFrameworksBuildPhase section */
 		85FDDB742EC4EC9100CEF4B7 /* Frameworks */ = {
@@ -39,8 +37,10 @@
 			isa = PBXGroup;
 			children = (
 				85FDDBAA2EC5C17D00CEF4B7 /* FacebookExample-Info.plist */,
-				85FDDB792EC4EC9100CEF4B7 /* Example */,
 				85FDDB782EC4EC9100CEF4B7 /* Products */,
+				85B76F312EC6171100C81A6D /* Assets.xcassets */,
+				85B76F322EC6171100C81A6D /* ContentView.swift */,
+				85B76F332EC6171100C81A6D /* FacebookExampleApp.swift */,
 			);
 			sourceTree = "<group>";
 		};
@@ -67,9 +67,6 @@
 			);
 			dependencies = (
 			);
-			fileSystemSynchronizedGroups = (
-				85FDDB792EC4EC9100CEF4B7 /* Example */,
-			);
 			name = FacebookExample;
 			packageProductDependencies = (
 				85FDDB862EC4ED1200CEF4B7 /* RudderIntegrationFacebook */,
@@ -93,7 +90,7 @@
 					};
 				};
 			};
-			buildConfigurationList = 85FDDB722EC4EC9100CEF4B7 /* Build configuration list for PBXProject "FacebookExample" */;
+			buildConfigurationList = 85FDDB722EC4EC9100CEF4B7 /* Build configuration list for PBXProject "Example" */;
 			developmentRegion = en;
 			hasScannedForEncodings = 0;
 			knownRegions = (
@@ -120,6 +117,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85B76F342EC6171100C81A6D /* Assets.xcassets in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -130,6 +128,8 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				85B76F352EC6171100C81A6D /* ContentView.swift in Sources */,
+				85B76F362EC6171100C81A6D /* FacebookExampleApp.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -286,13 +286,14 @@
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				XROS_DEPLOYMENT_TARGET = 26.1;
 			};
 			name = Debug;
@@ -331,13 +332,14 @@
 				REGISTER_APP_GROUPS = YES;
 				SDKROOT = auto;
 				STRING_CATALOG_GENERATE_SYMBOLS = YES;
-				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator macosx xros xrsimulator";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
 				SWIFT_APPROACHABLE_CONCURRENCY = YES;
 				SWIFT_DEFAULT_ACTOR_ISOLATION = MainActor;
 				SWIFT_EMIT_LOC_STRINGS = YES;
 				SWIFT_UPCOMING_FEATURE_MEMBER_IMPORT_VISIBILITY = YES;
 				SWIFT_VERSION = 5.0;
-				TARGETED_DEVICE_FAMILY = "1,2,7";
+				TARGETED_DEVICE_FAMILY = "1,2";
 				XROS_DEPLOYMENT_TARGET = 26.1;
 			};
 			name = Release;
@@ -345,7 +347,7 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
-		85FDDB722EC4EC9100CEF4B7 /* Build configuration list for PBXProject "FacebookExample" */ = {
+		85FDDB722EC4EC9100CEF4B7 /* Build configuration list for PBXProject "Example" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
 				85FDDB802EC4EC9300CEF4B7 /* Debug */,
