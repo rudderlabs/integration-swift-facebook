@@ -25,11 +25,11 @@ protocol FacebookAppEventsAdapter {
 // MARK: Actual Implementation
 class DefaultFacebookAppEventsAdapter: FacebookAppEventsAdapter {
     var appEventsInstance: Any?
-    
+
     private var appEvents: AppEvents? {
         return appEventsInstance as? AppEvents
     }
-    
+
     var userID: String? {
         get {
             return appEvents?.userID

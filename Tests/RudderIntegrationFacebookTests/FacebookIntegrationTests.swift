@@ -129,14 +129,14 @@ struct FacebookIntegrationTests {
         let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
 
         let config: [String: Any] = ["limitedDataUse": false]
-        
+
         // First call should set the instance
         try integration.create(destinationConfig: config)
         #expect(mockAppEvents.appEventsInstance as? String == "MockAppEventsInstance")
-        
+
         // Modify the instance to verify it's not overwritten
         mockAppEvents.appEventsInstance = "ModifiedInstance"
-        
+
         // Second call should not overwrite the instance
         try integration.create(destinationConfig: config)
         #expect(mockAppEvents.appEventsInstance as? String == "ModifiedInstance")

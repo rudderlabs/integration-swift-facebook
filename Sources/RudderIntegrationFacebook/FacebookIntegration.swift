@@ -25,7 +25,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
     final var appEventsAdapter: FacebookAppEventsAdapter
     final let settingsAdapter: FacebookSettingsAdapter
 
-    internal init(
+    init(
         appEventsAdapter: FacebookAppEventsAdapter,
         settingsAdapter: FacebookSettingsAdapter
     ) {
@@ -49,7 +49,6 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
     private var limitedDataUse: Bool = false
     private var dpoState: Int = 0
     private var dpoCountry: Int = 0
-    private let supportedEvents: [String] = ["identify", "track", "screen"]
     private let trackReservedKeywords: [String] = [
         ECommerceParamNames.productId, ECommerceParamNames.rating, "name", ECommerceParamNames.orderId, ECommerceParamNames.currency,
         "description", ECommerceParamNames.query, "value", ECommerceParamNames.price, ECommerceParamNames.revenue
@@ -277,10 +276,6 @@ private extension FacebookIntegration {
         let successMessage = isUpdate ? "Integration configuration updated successfully" : "Integration initialized successfully"
         LoggerAnalytics.debug("FacebookIntegration: \(successMessage)")
     }
-}
-
-// MARK: - FacebookIntegration Utility Methods Extension
-private extension FacebookIntegration {
 
     func getFacebookEventName(_ event: String) -> String {
         // Map common ecommerce events to Facebook standard events
@@ -334,9 +329,23 @@ private extension FacebookIntegration {
             let parameterName = AppEvents.ParameterName(rawValue: key)
 
             // Handle different value types
-            if let numberValue = value as? NSNumber {
+            switch value {
+            case let intValue as Int:
+                params[parameterName] = intValue
+
+            case let doubleValue as Double:
+                params[parameterName] = doubleValue
+
+            case let floatValue as Float:
+                params[parameterName] = Double(floatValue)
+
+            case let boolValue as Bool:
+                params[parameterName] = boolValue
+    
+            case let numberValue as NSNumber:
                 params[parameterName] = numberValue
-            } else {
+
+            default:
                 params[parameterName] = String(describing: value)
             }
         }
@@ -377,13 +386,25 @@ private extension FacebookIntegration {
     func getValueToSum(from properties: [String: Any], key: String) -> Double? {
         guard let value = properties[key] else { return nil }
 
-        if let numberValue = value as? NSNumber {
-            return numberValue.doubleValue
-        } else if let stringValue = value as? String {
-            return Double(stringValue)
-        }
+        switch value {
+        case let n as Int:
+            return Double(n)
 
-        return nil
+        case let n as Double:
+            return n
+
+        case let n as Float:
+            return Double(n)
+
+        case let n as NSNumber:
+            return n.doubleValue
+
+        case let stringValue as String:
+            return Double(stringValue)
+
+        default:
+            return nil
+        }
     }
 
     func extractCurrency(from properties: [String: Any], key: String) -> String {
