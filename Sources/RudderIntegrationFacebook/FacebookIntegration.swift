@@ -156,42 +156,41 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         let properties = payload.properties?.dictionary?.rawDictionary ?? [:]
 
         // Create parameters dictionary for custom properties
-        var params: [AppEvents.ParameterName: Any] = [:]
-        handleCustomProperties(properties: properties, params: &params, isScreenEvent: false)
+        let customParams = handleCustomProperties(properties: properties, isScreenEvent: false)
 
         // Handle different Facebook standard events
         switch facebookEventName {
         case AppEvents.Name.addedToCart.rawValue,
              AppEvents.Name.addedToWishlist.rawValue,
              AppEvents.Name.viewedContent.rawValue:
-            handleStandardProperties(properties: properties, params: &params, eventName: facebookEventName)
+            let standardParams = handleStandardProperties(properties: properties, eventName: facebookEventName)
             if let price = getValueToSum(from: properties, key: ECommerceParamNames.price) {
-                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), valueToSum: price, parameters: params)
+                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), valueToSum: price, parameters: standardParams + customParams)
                 LoggerAnalytics.debug("FacebookIntegration: Logged \"\(facebookEventName)\" to Facebook with price: \(price) and properties: \(properties)")
             } else {
-                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: standardParams + customParams)
                 LoggerAnalytics.debug("FacebookIntegration: Logged \"\(facebookEventName)\" to Facebook with properties: \(properties)")
             }
 
         case AppEvents.Name.initiatedCheckout.rawValue,
              AppEvents.Name.spentCredits.rawValue:
-            handleStandardProperties(properties: properties, params: &params, eventName: facebookEventName)
+            let standardParams = handleStandardProperties(properties: properties, eventName: facebookEventName)
             if let value = getValueToSum(from: properties, key: "value") {
-                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), valueToSum: value, parameters: params)
+                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), valueToSum: value, parameters: standardParams + customParams)
                 LoggerAnalytics.debug("FacebookIntegration: Logged \"\(facebookEventName)\" to Facebook with value: \(value) and properties: \(properties)")
             } else {
-                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: standardParams + customParams)
                 LoggerAnalytics.debug("FacebookIntegration: Logged \"\(facebookEventName)\" to Facebook with properties: \(properties)")
             }
 
         case "Order Completed": // Special handling for purchases
-            handleStandardProperties(properties: properties, params: &params, eventName: facebookEventName)
+            let standardParams = handleStandardProperties(properties: properties, eventName: facebookEventName)
             if let revenue = getValueToSum(from: properties, key: ECommerceParamNames.revenue) {
                 let currency = extractCurrency(from: properties, key: ECommerceParamNames.currency)
-                appEventsAdapter.logPurchase(amount: revenue, currency: currency, parameters: params)
+                appEventsAdapter.logPurchase(amount: revenue, currency: currency, parameters: standardParams + customParams)
                 LoggerAnalytics.debug("FacebookIntegration: Logged purchase to Facebook with revenue: \(revenue), currency: \(currency) and properties: \(properties)")
             } else {
-                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+                appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: standardParams + customParams)
                 LoggerAnalytics.debug("FacebookIntegration: Logged \"\(facebookEventName)\" to Facebook with properties: \(properties)")
             }
 
@@ -206,13 +205,13 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
              AppEvents.Name.adClick.rawValue,
              AppEvents.Name.adImpression.rawValue,
              AppEvents.Name.rated.rawValue:
-            handleStandardProperties(properties: properties, params: &params, eventName: facebookEventName)
-            appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+            let standardParams = handleStandardProperties(properties: properties, eventName: facebookEventName)
+            appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: standardParams + customParams)
             LoggerAnalytics.debug("FacebookIntegration: Logged \"\(facebookEventName)\" to Facebook with properties: \(properties)")
 
         default:
             // Custom event
-            appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: params)
+            appEventsAdapter.logEvent(AppEvents.Name(rawValue: facebookEventName), parameters: customParams)
             LoggerAnalytics.debug("FacebookIntegration: Logged custom event \"\(facebookEventName)\" to Facebook with properties: \(properties)")
         }
     }
@@ -233,8 +232,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         let properties = payload.properties?.dictionary?.rawDictionary ?? [:]
 
         // Create parameters dictionary - screen events don't skip reserved keywords
-        var params: [AppEvents.ParameterName: Any] = [:]
-        handleCustomProperties(properties: properties, params: &params, isScreenEvent: true)
+        let params = handleCustomProperties(properties: properties, isScreenEvent: true)
 
         appEventsAdapter.logEvent(AppEvents.Name(rawValue: eventName), parameters: params)
 
@@ -319,7 +317,8 @@ private extension FacebookIntegration {
         }
     }
 
-    func handleCustomProperties(properties: [String: Any], params: inout [AppEvents.ParameterName: Any], isScreenEvent: Bool) {
+    func handleCustomProperties(properties: [String: Any], isScreenEvent: Bool) -> [AppEvents.ParameterName: Any] {
+        var params = [AppEvents.ParameterName: Any]()
         for (key, value) in properties {
             // Skip reserved keywords for track events (but not screen events)
             if !isScreenEvent && trackReservedKeywords.contains(key) {
@@ -341,7 +340,7 @@ private extension FacebookIntegration {
 
             case let boolValue as Bool:
                 params[parameterName] = boolValue
-    
+
             case let numberValue as NSNumber:
                 params[parameterName] = numberValue
 
@@ -349,10 +348,12 @@ private extension FacebookIntegration {
                 params[parameterName] = String(describing: value)
             }
         }
+        return params
     }
 
-    func handleStandardProperties(properties: [String: Any], params: inout [AppEvents.ParameterName: Any], eventName: String) {
+    func handleStandardProperties(properties: [String: Any], eventName: String) -> [AppEvents.ParameterName: Any] {
         // Map standard ecommerce properties to Facebook parameters
+        var params = [AppEvents.ParameterName: Any]()
         if let productId = properties[ECommerceParamNames.productId] {
             params[AppEvents.ParameterName.contentID] = String(describing: productId)
         }
@@ -381,6 +382,7 @@ private extension FacebookIntegration {
         if let query = properties[ECommerceParamNames.query] {
             params[AppEvents.ParameterName.searchString] = String(describing: query)
         }
+        return params
     }
 
     func getValueToSum(from properties: [String: Any], key: String) -> Double? {
@@ -415,5 +417,11 @@ private extension FacebookIntegration {
             }
         }
         return "USD" // Default currency
+    }
+}
+
+extension Dictionary where Key == AppEvents.ParameterName {
+    static func + (lhs: [Key: Value], rhs: [Key: Value]) -> [Key: Value] {
+        return lhs.merging(rhs) { (_, new) in new }
     }
 }

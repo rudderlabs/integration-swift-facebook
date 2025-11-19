@@ -33,7 +33,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given destination config with limitedDataUse disabled, when integration is created, then data processing options are cleared")
     func testCreate_limitedDataUseDisabled() throws {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, _, mockSettings) = createIntegrationWithMocks()
 
         let config: [String: Any] = [
             "limitedDataUse": false,
@@ -52,7 +52,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given destination config with limitedDataUse enabled, when integration is created, then data processing options are set correctly")
     func testCreate_limitedDataUseEnabled() throws {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, _, mockSettings) = createIntegrationWithMocks()
 
         let config: [String: Any] = [
             "limitedDataUse": true,
@@ -71,7 +71,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given destination config with invalid dpoState, when integration is created, then dpoState is validated to 0")
     func testCreate_invalidDpoState() throws {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, _, mockSettings) = createIntegrationWithMocks()
 
         let config: [String: Any] = [
             "limitedDataUse": true,
@@ -90,7 +90,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given destination config with invalid dpoCountry, when integration is created, then dpoCountry is validated to 0")
     func testCreate_invalidDpoCountry() throws {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, _, mockSettings) = createIntegrationWithMocks()
 
         let config: [String: Any] = [
             "limitedDataUse": true,
@@ -109,7 +109,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given integration is created, when getDestinationInstance is called, then returns app events instance")
     func testGetDestinationInstance() throws {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         // Before create is called, should return nil
         let instanceBeforeCreate = integration.getDestinationInstance()
@@ -126,7 +126,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given integration is created multiple times, when create is called, then app events instance is only set once")
     func testCreate_multipleCallsOnlySetInstanceOnce() throws {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let config: [String: Any] = ["limitedDataUse": false]
 
@@ -144,7 +144,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given integration config is updated, when update is called, then data processing options are updated")
     func testUpdate() throws {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, _, mockSettings) = createIntegrationWithMocks()
 
         let initialConfig: [String: Any] = ["limitedDataUse": false]
         try integration.create(destinationConfig: initialConfig)
@@ -165,7 +165,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given integration is reset, when reset is called, then user data is cleared")
     func testReset() throws {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let config: [String: Any] = ["limitedDataUse": false]
         try integration.create(destinationConfig: config)
@@ -180,7 +180,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given identify event with userId, when identify is called, then userId is set")
     func testIdentify_withUserId() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let identifyEvent = createIdentifyEvent(userId: "user123")
 
@@ -191,7 +191,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given identify event with all user traits, when identify is called, then all user data is set")
     func testIdentify_withAllTraits() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let address: [String: Any] = [
             "city": "San Francisco",
@@ -241,7 +241,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given identify event with no traits, when identify is called, then only userId is set")
     func testIdentify_withNoTraits() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let identifyEvent = createIdentifyEvent(userId: "user123")
 
@@ -253,7 +253,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given identify event with partial address, when identify is called, then only available address fields are set")
     func testIdentify_withPartialAddress() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let address: [String: Any] = [
             "city": "New York",
@@ -289,7 +289,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event for products searched, when track is called, then Facebook searched event is logged")
     func testTrack_productsSearched() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             "query": "shoes",
@@ -309,7 +309,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event for product viewed with price, when track is called, then Facebook viewed content event is logged with valueToSum")
     func testTrack_productViewed_withPrice() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             ECommerceParamNames.productId: "prod123",
@@ -330,7 +330,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event for product added to cart, when track is called, then Facebook added to cart event is logged")
     func testTrack_productAdded() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             ECommerceParamNames.productId: "prod456",
@@ -351,7 +351,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event for product added to wishlist, when track is called, then Facebook added to wishlist event is logged")
     func testTrack_productAddedToWishlist() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             ECommerceParamNames.productId: "wish123",
@@ -370,7 +370,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event for checkout started with value, when track is called, then Facebook initiated checkout event is logged")
     func testTrack_checkoutStarted() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             "value": 299.97,
@@ -391,7 +391,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event for order completed with revenue, when track is called, then Facebook purchase event is logged")
     func testTrack_orderCompleted_withRevenue() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             ECommerceParamNames.revenue: 199.99,
@@ -413,7 +413,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event for order completed without revenue, when track is called, then regular Facebook event is logged")
     func testTrack_orderCompleted_withoutRevenue() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             ECommerceParamNames.orderId: "order789"
@@ -433,7 +433,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event for payment info entered, when track is called, then Facebook added payment info event is logged")
     func testTrack_paymentInfoEntered() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             "payment_method": "credit_card"
@@ -451,7 +451,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event with standard event properties, when track is called, then properties are mapped correctly")
     func testTrack_standardEventProperties() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             ECommerceParamNames.productId: "prod123",
@@ -480,7 +480,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event for other standard events, when track is called, then appropriate Facebook events are logged")
     func testTrack_otherStandardEvents() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let testCases: [(String, String)] = [
             ("Complete Registration", AppEvents.Name.completedRegistration.rawValue),
@@ -508,7 +508,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event with custom event name, when track is called, then custom event is logged")
     func testTrack_customEvent() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             "custom_property": "custom_value",
@@ -528,7 +528,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event with event name exceeding 40 characters, when track is called, then event name is truncated")
     func testTrack_longEventName() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let longEventName = "This is a very long event name that exceeds forty characters"
         let expectedTruncatedName = String(longEventName.prefix(40))
@@ -544,7 +544,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event with empty event name, when track is called, then event is dropped")
     func testTrack_emptyEventName() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let trackEvent = createTrackEvent(name: "")
 
@@ -555,7 +555,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event with reserved keywords, when track is called, then reserved keywords are filtered out")
     func testTrack_reservedKeywords() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             ECommerceParamNames.productId: "prod123", // Reserved keyword - should be filtered
@@ -579,7 +579,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event with currency extraction, when track is called, then currency is extracted case-insensitively")
     func testTrack_currencyExtraction() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             "CURRENCY": "EUR" // Uppercase key
@@ -595,7 +595,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given track event without currency, when track is called, then default USD currency is used")
     func testTrack_defaultCurrency() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let trackEvent = createTrackEvent(name: ECommerceEvents.productViewed)
 
@@ -610,7 +610,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given screen event with screen name, when screen is called, then Facebook event is logged")
     func testScreen_withScreenName() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let screenEvent = createScreenEvent(name: "Home")
 
@@ -626,7 +626,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given screen event with properties, when screen is called, then properties are included")
     func testScreen_withProperties() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             "section": "main",
@@ -651,7 +651,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given screen event with long screen name, when screen is called, then screen name is truncated to 26 characters")
     func testScreen_longScreenName() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let longScreenName = "This is a very long screen name that exceeds twenty six characters"
         let expectedTruncatedName = String(longScreenName.prefix(26))
@@ -667,7 +667,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given screen event with empty screen name, when screen is called, then event is dropped")
     func testScreen_emptyScreenName() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let screenEvent = createScreenEvent(name: "")
 
@@ -680,7 +680,7 @@ struct FacebookIntegrationTests {
 
     @Test("Given properties with various data types, when processed, then types are handled correctly")
     func testPropertyTypeHandling() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let properties: [String: Any] = [
             "string_value": "test",
@@ -699,13 +699,13 @@ struct FacebookIntegrationTests {
         #expect(call.parameters["string_value"] as? String == "test")
         #expect(call.parameters["int_value"] as? NSNumber == 42)
         #expect(call.parameters["double_value"] as? NSNumber == 3.14)
-        #expect(call.parameters["bool_value"] as? Double == 1) // Converted to double
+        #expect(call.parameters["bool_value"] as? Bool == true)
         #expect(call.parameters["null_value"] as? String == "<null>") // Converted to string
     }
 
     @Test("Given value extraction for different numeric types, when getValueToSum is called, then correct values are extracted")
     func testValueExtraction() {
-        let (integration, mockAppEvents, mockSettings) = createIntegrationWithMocks()
+        let (integration, mockAppEvents, _) = createIntegrationWithMocks()
 
         let testCases: [([String: Any], Double?)] = [
             (["price": 99], 99.0),
