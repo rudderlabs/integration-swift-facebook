@@ -156,7 +156,6 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         let properties = payload.properties?.dictionary?.rawDictionary ?? [:]
 
         // Create parameters dictionary for custom properties
-//        var params: [AppEvents.ParameterName: Any] = [:]
         let customParams = handleCustomProperties(properties: properties, isScreenEvent: false)
 
         // Handle different Facebook standard events
@@ -390,30 +389,18 @@ private extension FacebookIntegration {
         guard let value = properties[key] else { return nil }
 
         switch value {
-<<<<<<< HEAD
-        case let n as NSNumber:
-            return n.doubleValue
-
         case let n as Int:
             return Double(n)
 
-=======
-        case let n as Int:
-            return Double(n)
-
->>>>>>> feat/sdk-501-add-facebook-integration
         case let n as Double:
             return n
 
         case let n as Float:
             return Double(n)
 
-<<<<<<< HEAD
-=======
         case let n as NSNumber:
             return n.doubleValue
 
->>>>>>> feat/sdk-501-add-facebook-integration
         case let stringValue as String:
             return Double(stringValue)
 
