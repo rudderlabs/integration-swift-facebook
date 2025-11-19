@@ -34,7 +34,7 @@ struct FacebookExampleApp: App {
         LoggerAnalytics.logLevel = .verbose
         
         // Configuration for RudderStack Analytics
-        let configuration = Configuration(writeKey: "", dataPlaneUrl: "")
+        let configuration = Configuration(writeKey: "YOUR_WRITE_KEY", dataPlaneUrl: "YOUR_DATA_PLANE_URL")
         
         // Initialize Analytics
         let analytics = Analytics(configuration: configuration)
