@@ -263,12 +263,10 @@ private extension FacebookIntegration {
         // Configure Facebook data processing options
         if self.limitedDataUse {
             settingsAdapter.setDataProcessingOptions(["LDU"], country: Int32(self.dpoCountry), state: Int32(self.dpoState))
-            let actionWord = isUpdate ? "Updated" : ""
-            LoggerAnalytics.debug("FacebookIntegration: \(actionWord) data processing options \(isUpdate ? "to" : "set to") [LDU] with country: \(self.dpoCountry), state: \(self.dpoState)")
+            LoggerAnalytics.debug("FacebookIntegration: \(isUpdate ? "Updated data processing options to" : "Set data processing options to") [LDU] with country: \(self.dpoCountry), state: \(self.dpoState)")
         } else {
             settingsAdapter.setDataProcessingOptions([])
-            let actionWord = isUpdate ? "Updated" : ""
-            LoggerAnalytics.debug("FacebookIntegration: \(actionWord) data processing options cleared (no LDU restrictions)")
+            LoggerAnalytics.debug("FacebookIntegration: \(isUpdate ? "Updated data processing options cleared" : "Data processing options cleared") (no LDU restrictions)")
         }
 
         let successMessage = isUpdate ? "Integration configuration updated successfully" : "Integration initialized successfully"
