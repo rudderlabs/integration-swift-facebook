@@ -49,9 +49,183 @@ struct FacebookExampleApp: App {
 }
 
 // Singleton to manage analytics instance
-class AnalyticsManager: ObservableObject {
+class AnalyticsManager {
     static let shared = AnalyticsManager()
-    @Published var analytics: Analytics?
-    
+    var analytics: Analytics?
+
     private init() {}
+}
+
+extension AnalyticsManager {
+
+    // MARK: - User Identity
+
+    func identifyUser() {
+        let traits: [String: Any] = [
+            "address": getAddress(),
+            "email": "test@random.com",
+            "firstName": "FName",
+            "lastName": "LName",
+            "phone": "1234567890",
+            "birthday": "1990-01-01",
+            "gender": "M"
+        ]
+        
+        analytics?.identify(userId: "iOSUserId", traits: traits)
+        print("✅ Identified user with traits")
+    }
+
+    // MARK: - E-commerce Events
+
+    func productsSearchedEvent() {
+        analytics?.track(name: "Products Searched", properties: getAllStandardProperties())
+        print("✅ Tracked Products Searched event")
+    }
+
+    func productViewedEvent() {
+        analytics?.track(name: "Product Viewed", properties: getAllStandardProperties())
+        print("✅ Tracked Product Viewed event")
+    }
+
+    func productAddedEvent() {
+        analytics?.track(name: "Product Added", properties: getAllStandardProperties())
+        print("✅ Tracked Product Added event")
+    }
+
+    func productAddedToWishlistEvent() {
+        analytics?.track(name: "Product Added to Wishlist", properties: getAllStandardProperties())
+        print("✅ Tracked Product Added to Wishlist event")
+    }
+
+    func checkoutStartedEvent() {
+        analytics?.track(name: "Checkout Started", properties: getAllStandardProperties())
+        print("✅ Tracked Checkout Started event")
+    }
+
+    func paymentInfoEnteredEvent() {
+        analytics?.track(name: "Payment Info Entered", properties: getAllStandardProperties())
+        print("✅ Tracked Payment Info Entered event")
+    }
+
+    func orderCompletedEvent() {
+        analytics?.track(name: "Order Completed", properties: getAllStandardProperties())
+        print("✅ Tracked Order Completed event")
+    }
+
+    func productReviewedEvent() {
+        analytics?.track(name: "Product Reviewed", properties: getAllStandardProperties())
+        print("✅ Tracked Product Reviewed event")
+    }
+
+    // MARK: - App Lifecycle Events
+
+    func completeRegistrationEvent() {
+        analytics?.track(name: "Complete Registration", properties: getAllStandardProperties())
+        print("✅ Tracked Complete Registration event")
+    }
+
+    func achieveLevelEvent() {
+        analytics?.track(name: "Achieve Level", properties: getAllStandardProperties())
+        print("✅ Tracked Achieve Level event")
+    }
+
+    func completeTutorialEvent() {
+        analytics?.track(name: "Complete Tutorial", properties: getAllStandardProperties())
+        print("✅ Tracked Complete Tutorial event")
+    }
+
+    func unlockAchievementEvent() {
+        analytics?.track(name: "Unlock Achievement", properties: getAllStandardProperties())
+        print("✅ Tracked Unlock Achievement event")
+    }
+
+    func subscribeEvent() {
+        analytics?.track(name: "Subscribe", properties: getAllStandardProperties())
+        print("✅ Tracked Subscribe event")
+    }
+
+    func startTrialEvent() {
+        analytics?.track(name: "Start Trial", properties: getAllStandardProperties())
+        print("✅ Tracked Start Trial event")
+    }
+
+    func spendCreditsEvent() {
+        analytics?.track(name: "Spend Credits", properties: getAllStandardProperties())
+        print("✅ Tracked Spend Credits event")
+    }
+
+    // MARK: - Advertising Events
+
+    func promotionClickedEvent() {
+        analytics?.track(name: "Promotion Clicked", properties: getAllStandardProperties())
+        print("✅ Tracked Promotion Clicked event")
+    }
+
+    func promotionViewedEvent() {
+        analytics?.track(name: "Promotion Viewed", properties: getAllStandardProperties())
+        print("✅ Tracked Promotion Viewed event")
+    }
+
+    // MARK: - Custom Events
+
+    func customTrackEventWithoutProperties() {
+        analytics?.track(name: "level_up")
+        analytics?.track(name: "custom track 2")
+        print("✅ Tracked custom events without properties")
+    }
+
+    func customTrackEventWithProperties() {
+        analytics?.track(name: "daily_rewards_claim", properties: getCustomProperties())
+        print("✅ Tracked custom event with properties")
+    }
+
+    // MARK: - Screen Events
+
+    func screenEvents() {
+        analytics?.screen(screenName: "View Controller 1")
+        analytics?.screen(screenName: "View Controller 2", properties: getCustomProperties())
+        print("✅ Tracked screen events")
+    }
+
+    // MARK: - Reset
+
+    func resetUser() {
+        analytics?.reset()
+        print("✅ Reset user data")
+    }
+}
+
+extension AnalyticsManager {
+    
+    private func getAddress() -> [String: Any] {
+        return [
+            "city": "Random City",
+            "state": "Random State",
+            "country": "Random Country"
+        ]
+    }
+    
+    private func getAllStandardProperties() -> [String: Any] {
+        return [
+            "price": 123,
+            "value": 124,
+            "revenue": 125,
+            "currency": "INR",
+            "product_id": "1001",
+            "rating": 5,
+            "name": "AdTypeValue",
+            "order_id": "2001",
+            "description": "description value",
+            "query": "query value",
+            "key-1": 123,
+            "key-2": "value-1"
+        ]
+    }
+    
+    private func getCustomProperties() -> [String: Any] {
+        return [
+            "key-1": 123,
+            "key-2": "value-1"
+        ]
+    }
 }

@@ -9,189 +9,33 @@ import SwiftUI
 import RudderStackAnalytics
 
 struct ContentView: View {
-    @StateObject private var analyticsManager = AnalyticsManager.shared
+    private var analyticsManager = AnalyticsManager.shared
     
     var body: some View {
         NavigationView {
             ScrollView {
                 VStack(spacing: 16) {
-                    Text("Facebook Integration Example")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding()
                     
                     // User Identity Section
-                    VStack(spacing: 12) {
-                        Text("User Identity")
-                            .font(.headline)
-                        
-                        Button("Identify User") {
-                            identify()
-                        }
-                        .buttonStyle(PrimaryButtonStyle())
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(10)
+                    userIdentitySection
                     
                     // E-commerce Events Section
-                    VStack(spacing: 12) {
-                        Text("E-commerce Events")
-                            .font(.headline)
-                        
-                        Button("Products Searched") {
-                            productsSearched()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Product Viewed") {
-                            productViewed()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Product Added") {
-                            productAdded()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Added to Wishlist") {
-                            productAddedToWishlist()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Checkout Started") {
-                            checkoutStarted()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Payment Info Entered") {
-                            paymentInfoEntered()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Order Completed") {
-                            orderCompleted()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Product Reviewed") {
-                            productReviewed()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                    }
-                    .padding()
-                    .background(Color.blue.opacity(0.1))
-                    .cornerRadius(10)
+                    ecommerceEventsSection
                     
                     // App Lifecycle Events Section
-                    VStack(spacing: 12) {
-                        Text("App Lifecycle Events")
-                            .font(.headline)
-                        
-                        Button("Complete Registration") {
-                            completeRegistration()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Achieve Level") {
-                            achieveLevel()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Complete Tutorial") {
-                            completeTutorial()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Unlock Achievement") {
-                            unlockAchievement()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Subscribe") {
-                            subscribe()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Start Trial") {
-                            startTrial()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Spend Credits") {
-                            spendCredits()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                    }
-                    .padding()
-                    .background(Color.green.opacity(0.1))
-                    .cornerRadius(10)
+                    appLifecycleEventsSection
                     
                     // Advertising Events Section
-                    VStack(spacing: 12) {
-                        Text("Advertising Events")
-                            .font(.headline)
-                        
-                        Button("Promotion Clicked") {
-                            promotionClicked()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Promotion Viewed") {
-                            promotionViewed()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                    }
-                    .padding()
-                    .background(Color.orange.opacity(0.1))
-                    .cornerRadius(10)
+                    advertisingEventsSection
                     
                     // Custom Events Section
-                    VStack(spacing: 12) {
-                        Text("Custom Events")
-                            .font(.headline)
-                        
-                        Button("Custom Track (No Properties)") {
-                            customTrackWithoutProperties()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                        
-                        Button("Custom Track (With Properties)") {
-                            customTrackWithProperties()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                    }
-                    .padding()
-                    .background(Color.purple.opacity(0.1))
-                    .cornerRadius(10)
+                    customEventsSection
                     
                     // Screen Events Section
-                    VStack(spacing: 12) {
-                        Text("Screen Events")
-                            .font(.headline)
-                        
-                        Button("Screen Events") {
-                            screenEvents()
-                        }
-                        .buttonStyle(SecondaryButtonStyle())
-                    }
-                    .padding()
-                    .background(Color.red.opacity(0.1))
-                    .cornerRadius(10)
+                    screenEventsSection
                     
                     // Reset Section
-                    VStack(spacing: 12) {
-                        Text("Reset")
-                            .font(.headline)
-                        
-                        Button("Reset User") {
-                            reset()
-                        }
-                        .buttonStyle(PrimaryButtonStyle())
-                    }
-                    .padding()
-                    .background(Color.gray.opacity(0.1))
-                    .cornerRadius(10)
+                    resetSection
                 }
                 .padding()
             }
@@ -200,182 +44,186 @@ struct ContentView: View {
     }
 }
 
-
-// MARK: - Event Methods
-
 extension ContentView {
-    
-    // MARK: - User Identity
-    
-    private func identify() {
-        let traits: [String: Any] = [
-            "address": getAddress(),
-            "email": "test@random.com",
-            "firstName": "FName",
-            "lastName": "LName",
-            "phone": "1234567890",
-            "birthday": "1990-01-01",
-            "gender": "M"
-        ]
-        
-        analyticsManager.analytics?.identify(userId: "iOSUserId", traits: traits)
-        print("✅ Identified user with traits")
-    }
-    
-    // MARK: - E-commerce Events
-    
-    private func productsSearched() {
-        analyticsManager.analytics?.track(name: "Products Searched", properties: getAllStandardProperties())
-        print("✅ Tracked Products Searched event")
-    }
-    
-    private func productViewed() {
-        analyticsManager.analytics?.track(name: "Product Viewed", properties: getAllStandardProperties())
-        print("✅ Tracked Product Viewed event")
-    }
-    
-    private func productAdded() {
-        analyticsManager.analytics?.track(name: "Product Added", properties: getAllStandardProperties())
-        print("✅ Tracked Product Added event")
-    }
-    
-    private func productAddedToWishlist() {
-        analyticsManager.analytics?.track(name: "Product Added to Wishlist", properties: getAllStandardProperties())
-        print("✅ Tracked Product Added to Wishlist event")
-    }
-    
-    private func checkoutStarted() {
-        analyticsManager.analytics?.track(name: "Checkout Started", properties: getAllStandardProperties())
-        print("✅ Tracked Checkout Started event")
-    }
-    
-    private func paymentInfoEntered() {
-        analyticsManager.analytics?.track(name: "Payment Info Entered", properties: getAllStandardProperties())
-        print("✅ Tracked Payment Info Entered event")
-    }
-    
-    private func orderCompleted() {
-        analyticsManager.analytics?.track(name: "Order Completed", properties: getAllStandardProperties())
-        print("✅ Tracked Order Completed event")
-    }
-    
-    private func productReviewed() {
-        analyticsManager.analytics?.track(name: "Product Reviewed", properties: getAllStandardProperties())
-        print("✅ Tracked Product Reviewed event")
-    }
-    
-    // MARK: - App Lifecycle Events
-    
-    private func completeRegistration() {
-        analyticsManager.analytics?.track(name: "Complete Registration", properties: getAllStandardProperties())
-        print("✅ Tracked Complete Registration event")
-    }
-    
-    private func achieveLevel() {
-        analyticsManager.analytics?.track(name: "Achieve Level", properties: getAllStandardProperties())
-        print("✅ Tracked Achieve Level event")
-    }
-    
-    private func completeTutorial() {
-        analyticsManager.analytics?.track(name: "Complete Tutorial", properties: getAllStandardProperties())
-        print("✅ Tracked Complete Tutorial event")
-    }
-    
-    private func unlockAchievement() {
-        analyticsManager.analytics?.track(name: "Unlock Achievement", properties: getAllStandardProperties())
-        print("✅ Tracked Unlock Achievement event")
-    }
-    
-    private func subscribe() {
-        analyticsManager.analytics?.track(name: "Subscribe", properties: getAllStandardProperties())
-        print("✅ Tracked Subscribe event")
-    }
-    
-    private func startTrial() {
-        analyticsManager.analytics?.track(name: "Start Trial", properties: getAllStandardProperties())
-        print("✅ Tracked Start Trial event")
-    }
-    
-    private func spendCredits() {
-        analyticsManager.analytics?.track(name: "Spend Credits", properties: getAllStandardProperties())
-        print("✅ Tracked Spend Credits event")
-    }
-    
-    // MARK: - Advertising Events
-    
-    private func promotionClicked() {
-        analyticsManager.analytics?.track(name: "Promotion Clicked", properties: getAllStandardProperties())
-        print("✅ Tracked Promotion Clicked event")
-    }
-    
-    private func promotionViewed() {
-        analyticsManager.analytics?.track(name: "Promotion Viewed", properties: getAllStandardProperties())
-        print("✅ Tracked Promotion Viewed event")
-    }
-    
-    // MARK: - Custom Events
-    
-    private func customTrackWithoutProperties() {
-        analyticsManager.analytics?.track(name: "level_up")
-        analyticsManager.analytics?.track(name: "custom track 2")
-        print("✅ Tracked custom events without properties")
-    }
-    
-    private func customTrackWithProperties() {
-        analyticsManager.analytics?.track(name: "daily_rewards_claim", properties: getCustomProperties())
-        print("✅ Tracked custom event with properties")
-    }
-    
-    // MARK: - Screen Events
-    
-    private func screenEvents() {
-        analyticsManager.analytics?.screen(screenName: "View Controller 1")
-        analyticsManager.analytics?.screen(screenName: "View Controller 2", properties: getCustomProperties())
-        print("✅ Tracked screen events")
-    }
-    
-    // MARK: - Reset
-    
-    private func reset() {
-        analyticsManager.analytics?.reset()
-        print("✅ Reset user data")
-    }
-}
 
-// MARK: - Data Helpers
+    var userIdentitySection: some View {
+        VStack(spacing: 12) {
+            Text("User Identity")
+                .font(.headline)
+            
+            Button("Identify User") {
+                analyticsManager.identifyUser()
+            }
+            .buttonStyle(PrimaryButtonStyle())
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(10)
+    }
 
-extension ContentView {
-    
-    private func getAddress() -> [String: Any] {
-        return [
-            "city": "Random City",
-            "state": "Random State",
-            "country": "Random Country"
-        ]
+    var ecommerceEventsSection: some View {
+        VStack(spacing: 12) {
+            Text("E-commerce Events")
+                .font(.headline)
+            
+            Button("Products Searched") {
+                analyticsManager.productsSearchedEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Product Viewed") {
+                analyticsManager.productViewedEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Product Added") {
+                analyticsManager.productAddedEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Added to Wishlist") {
+                analyticsManager.productAddedToWishlistEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Checkout Started") {
+                analyticsManager.checkoutStartedEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Payment Info Entered") {
+                analyticsManager.paymentInfoEnteredEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Order Completed") {
+                analyticsManager.orderCompletedEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Product Reviewed") {
+                analyticsManager.productReviewedEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+        }
+        .padding()
+        .background(Color.blue.opacity(0.1))
+        .cornerRadius(10)
     }
-    
-    private func getAllStandardProperties() -> [String: Any] {
-        return [
-            "price": 123,
-            "value": 124,
-            "revenue": 125,
-            "currency": "INR",
-            "product_id": "1001",
-            "rating": 5,
-            "name": "AdTypeValue",
-            "order_id": "2001",
-            "description": "description value",
-            "query": "query value",
-            "key-1": 123,
-            "key-2": "value-1"
-        ]
+
+    var appLifecycleEventsSection: some View {
+        VStack(spacing: 12) {
+            Text("App Lifecycle Events")
+                .font(.headline)
+            
+            Button("Complete Registration") {
+                analyticsManager.completeRegistrationEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Achieve Level") {
+                analyticsManager.achieveLevelEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Complete Tutorial") {
+                analyticsManager.completeTutorialEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Unlock Achievement") {
+                analyticsManager.unlockAchievementEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Subscribe") {
+                analyticsManager.subscribeEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Start Trial") {
+                analyticsManager.startTrialEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Spend Credits") {
+                analyticsManager.spendCreditsEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+        }
+        .padding()
+        .background(Color.green.opacity(0.1))
+        .cornerRadius(10)
     }
-    
-    private func getCustomProperties() -> [String: Any] {
-        return [
-            "key-1": 123,
-            "key-2": "value-1"
-        ]
+
+    var advertisingEventsSection: some View {
+        VStack(spacing: 12) {
+            Text("Advertising Events")
+                .font(.headline)
+            
+            Button("Promotion Clicked") {
+                analyticsManager.promotionClickedEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Promotion Viewed") {
+                analyticsManager.promotionViewedEvent()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+        }
+        .padding()
+        .background(Color.orange.opacity(0.1))
+        .cornerRadius(10)
+    }
+
+    var customEventsSection: some View {
+        VStack(spacing: 12) {
+            Text("Custom Events")
+                .font(.headline)
+            
+            Button("Custom Track (No Properties)") {
+                analyticsManager.customTrackEventWithoutProperties()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+            
+            Button("Custom Track (With Properties)") {
+                analyticsManager.customTrackEventWithProperties()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+        }
+        .padding()
+        .background(Color.purple.opacity(0.1))
+        .cornerRadius(10)
+    }
+
+    var screenEventsSection: some View {
+        VStack(spacing: 12) {
+            Text("Screen Events")
+                .font(.headline)
+            
+            Button("Screen Events") {
+                analyticsManager.screenEvents()
+            }
+            .buttonStyle(SecondaryButtonStyle())
+        }
+        .padding()
+        .background(Color.red.opacity(0.1))
+        .cornerRadius(10)
+    }
+
+    var resetSection: some View {
+        VStack(spacing: 12) {
+            Text("Reset")
+                .font(.headline)
+            
+            Button("Reset User") {
+                analyticsManager.resetUser()
+            }
+            .buttonStyle(PrimaryButtonStyle())
+        }
+        .padding()
+        .background(Color.gray.opacity(0.1))
+        .cornerRadius(10)
     }
 }
 
