@@ -6,7 +6,6 @@
 //
 
 import SwiftUI
-import Combine
 import RudderStackAnalytics
 import RudderIntegrationFacebook
 import FacebookCore
