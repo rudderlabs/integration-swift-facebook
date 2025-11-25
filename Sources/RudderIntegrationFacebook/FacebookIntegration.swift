@@ -327,20 +327,8 @@ private extension FacebookIntegration {
 
             // Handle different value types
             switch value {
-            case let intValue as Int:
-                params[parameterName] = intValue
-
-            case let doubleValue as Double:
-                params[parameterName] = doubleValue
-
-            case let floatValue as Float:
-                params[parameterName] = Double(floatValue)
-
-            case let boolValue as Bool:
-                params[parameterName] = boolValue
-
-            case let numberValue as NSNumber:
-                params[parameterName] = numberValue
+            case is Int, is Double, is Float, is Bool, is NSNumber:
+                params[parameterName] = value
 
             default:
                 params[parameterName] = String(describing: value)
