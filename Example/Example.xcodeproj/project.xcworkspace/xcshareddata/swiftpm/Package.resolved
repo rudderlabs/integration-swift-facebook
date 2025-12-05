@@ -1,0 +1,24 @@
+{
+  "originHash" : "5ce113b48c45e6affc53d836b2869fcb1068f7c9aa24e287a15f0c6048f494f6",
+  "pins" : [
+    {
+      "identity" : "facebook-ios-sdk",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/facebook/facebook-ios-sdk",
+      "state" : {
+        "revision" : "32da5bdef917ccd845fcf319c5fb67c654459d27",
+        "version" : "18.0.2"
+      }
+    },
+    {
+      "identity" : "rudder-sdk-swift",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/rudderlabs/rudder-sdk-swift.git",
+      "state" : {
+        "branch" : "feat/sdk-502-make-standard-integration-public",
+        "revision" : "ac7e880e43308bb4c2d043de72ac52ba5ea3f064"
+      }
+    }
+  ],
+  "version" : 3
+}
