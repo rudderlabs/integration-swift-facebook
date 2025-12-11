@@ -50,8 +50,6 @@ let package = Package(
             targets: ["YourApp"]),
     ],
     dependencies: [
-        // Add the RudderStack Swift SDK
-        .package(url: "https://github.com/rudderlabs/rudder-sdk-swift.git", from: "<latest_version>"),
         // Add the Facebook integration
         .package(url: "https://github.com/rudderlabs/integration-swift-facebook.git", from: "<latest_version>")
     ],
