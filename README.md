@@ -97,10 +97,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             writeKey: "<WRITE_KEY>",
             dataPlaneUrl: "<DATA_PLANE_URL>"
         )
-        self.analytics = Analytics(configuration: config)
+        let analytics = Analytics(configuration: config)
 
         // Add Facebook integration
-        self.analytics?.add(plugin: FacebookIntegration())
+        analytics.add(plugin: FacebookIntegration())
 
         return true
     }
