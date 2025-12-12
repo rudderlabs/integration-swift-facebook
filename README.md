@@ -31,7 +31,7 @@ Add the Facebook integration to your Swift project using Swift Package Manager:
 1. In Xcode, go to `File > Add Package Dependencies`
 2. Enter the package repository URL: `https://github.com/rudderlabs/integration-swift-facebook` in the search bar
 3. Select the version you want to use
-4. Select the project to which you want to add the package
+4. Select the target to which you want to add the package
 5. Finally, click on **Add Package**
 
 Alternatively, add it to your `Package.swift` file:
@@ -51,7 +51,7 @@ let package = Package(
     ],
     dependencies: [
         // Add the Facebook integration
-        .package(url: "https://github.com/rudderlabs/integration-swift-facebook.git", from: "<latest_version>")
+        .package(url: "https://github.com/rudderlabs/integration-swift-facebook.git", .upToNextMajor: "<latest_version>")
     ],
     targets: [
         .target(
@@ -110,3 +110,19 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 Replace:
 - `<WRITE_KEY>`: Your project's write key from the RudderStack dashboard
 - `<DATA_PLANE_URL>`: The URL of your RudderStack data plane
+
+---
+
+## Contact us
+
+For more information:
+
+- Email us at [docs@rudderstack.com](mailto:docs@rudderstack.com)
+- Join our [Community Slack](https://rudderstack.com/join-rudderstack-slack-community)
+
+## Follow Us
+
+- [RudderStack Blog](https://rudderstack.com/blog/)
+- [Slack](https://rudderstack.com/join-rudderstack-slack-community)
+- [Twitter](https://twitter.com/rudderstack)
+- [YouTube](https://www.youtube.com/channel/UCgV-B77bV_-LOmKYHw8jvBw)
