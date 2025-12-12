@@ -57,7 +57,6 @@ let package = Package(
         .target(
             name: "YourApp",
             dependencies: [
-                .product(name: "RudderStackAnalytics", package: "rudder-sdk-swift"),
                 .product(name: "RudderIntegrationFacebook", package: "integration-swift-facebook")
             ]),
     ]
