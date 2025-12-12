@@ -51,7 +51,7 @@ let package = Package(
     ],
     dependencies: [
         // Add the Facebook integration
-        .package(url: "https://github.com/rudderlabs/integration-swift-facebook.git", .upToNextMajor: "<latest_version>")
+        .package(url: "https://github.com/rudderlabs/integration-swift-facebook.git", .upToNextMajor(from: "<latest_version>"))
     ],
     targets: [
         .target(
