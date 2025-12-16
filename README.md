@@ -87,8 +87,6 @@ import RudderIntegrationFacebook
 
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
-    var analytics: Analytics?
-
     func application(_ application: UIApplication, didFinishLaunchingWithOptions launchOptions: [UIApplication.LaunchOptionsKey: Any]?) -> Bool {
 
         // Initialize the RudderStack Analytics SDK
