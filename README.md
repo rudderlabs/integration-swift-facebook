@@ -29,10 +29,18 @@ The Facebook integration allows you to send your event data from RudderStack to 
 Add the Facebook integration to your Swift project using Swift Package Manager:
 
 1. In Xcode, go to `File > Add Package Dependencies`
+
+<img width="960" height="540" alt="add_package_dependency" src="https://github.com/user-attachments/assets/bb1236cd-8f53-4c1e-b528-9ff885785be1" />
+
 2. Enter the package repository URL: `https://github.com/rudderlabs/integration-swift-facebook` in the search bar
 3. Select the version you want to use
+   
+<img width="801" height="440" alt="select_package" src="https://github.com/user-attachments/assets/4a1401ae-9fe6-4ebe-ba04-ea0b616aefcf" />
+
 4. Select the target to which you want to add the package
 5. Finally, click on **Add Package**
+
+<img width="641" height="282" alt="select_target" src="https://github.com/user-attachments/assets/4ed359ef-71c5-44e3-9ba8-d6d00ee61b14" />
 
 Alternatively, add it to your `Package.swift` file:
 
