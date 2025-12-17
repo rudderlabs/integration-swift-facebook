@@ -4,7 +4,11 @@
 import PackageDescription
 
 let package = Package(
-    name: "integration-swift-facebook",
+    name: "RudderIntegrationFacebook",
+    platforms: [
+        .iOS(.v15),
+        .tvOS(.v15)
+    ],
     products: [
         // Products define the executables and libraries a package produces, making them visible to other packages.
         .library(
@@ -12,11 +16,18 @@ let package = Package(
             targets: ["RudderIntegrationFacebook"]
         )
     ],
+    dependencies: [
+        // Dependencies declare other packages that this package depends on.
+        .package(url: "https://github.com/facebook/facebook-ios-sdk", .upToNextMajor(from: "18.0.0")),
+        .package(url: "https://github.com/rudderlabs/rudder-sdk-swift.git", .upToNextMajor(from: "1.0.0"))
+    ],
     targets: [
-        // Targets are the basic building blocks of a package, defining a module or a test suite.
-        // Targets can depend on other targets in this package and products from dependencies.
         .target(
-            name: "RudderIntegrationFacebook"
+            name: "RudderIntegrationFacebook",
+            dependencies: [
+                .product(name: "FacebookCore", package: "facebook-ios-sdk"),
+                .product(name: "RudderStackAnalytics", package: "rudder-sdk-swift")
+            ]
         ),
         .testTarget(
             name: "RudderIntegrationFacebookTests",
