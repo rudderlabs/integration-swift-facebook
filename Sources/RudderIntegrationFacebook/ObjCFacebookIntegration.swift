@@ -163,7 +163,10 @@ public class ObjCFacebookIntegration: NSObject, ObjCIntegrationPlugin, ObjCStand
         var identifyEvent = IdentifyEvent(options: payload.options)
         identifyEvent.anonymousId = payload.anonymousId
         identifyEvent.userId = payload.userId
-
+        if let context = payload.context {
+            identifyEvent.context = context.mapValues { AnyCodable($0) }
+        }
+        
         facebookIntegration.identify(payload: identifyEvent)
     }
 
