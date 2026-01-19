@@ -22,6 +22,8 @@
 
 The Facebook integration allows you to send your event data from RudderStack to Facebook for analytics and advertising.
 
+> This SDK fully supports both Swift and Objective-C and can be used seamlessly in either type of project.
+
 ## Installation
 
 ### Swift Package Manager
