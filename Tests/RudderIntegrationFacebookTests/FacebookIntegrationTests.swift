@@ -43,6 +43,18 @@ struct FacebookIntegrationTests {
         #expect(call.state == 1000)
     }
 
+    @Test("given a created integration, when create is called again with a new config, then the new data processing options apply")
+    func testCreateAgainAppliesNewConfig() throws {
+        let (integration, _, mockSettings) = createIntegrationWithMocks()
+
+        try integration.create(destinationConfig: ["limitedDataUse": false])
+        try integration.create(destinationConfig: ["limitedDataUse": true, "dpoState": 1000, "dpoCountry": 1])
+
+        #expect(mockSettings.setDataProcessingOptionsCalls.count == 2)
+        #expect(mockSettings.setDataProcessingOptionsCalls.last?.options == ["LDU"])
+        #expect(integration.getDestinationInstance() != nil)
+    }
+
     @Test("given destination config with invalid dpoState, when integration is created, then dpoState is validated to 0")
     func testCreateInvalidDpoState() throws {
         let (integration, _, mockSettings) = createIntegrationWithMocks()

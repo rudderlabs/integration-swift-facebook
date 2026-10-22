@@ -63,8 +63,8 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
     public func create(destinationConfig: [String: Any]) throws {
         if appEventsAdapter.appEventsInstance == nil {
             appEventsAdapter.appEventsInstance = appEventsAdapter.provideAppEventsInstance()
-            configureDataProcessingOptions(from: destinationConfig, isUpdate: false)
         }
+        configureDataProcessingOptions(from: destinationConfig, isUpdate: false)
     }
 
     // MARK: - Optional IntegrationPlugin Methods
