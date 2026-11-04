@@ -85,7 +85,6 @@ This integration supports Facebook iOS SDK version:
 
 The integration supports the following platforms:
 - iOS 15.0+
-- tvOS 15.0+
 
 ## Usage
 
