@@ -95,47 +95,11 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         }
 
         // Set user data properties
-        if let email = traits["email"] as? String {
-            appEventsAdapter.setUserData(email, forType: .email)
-        }
-
-        if let firstName = traits["firstName"] as? String {
-            appEventsAdapter.setUserData(firstName, forType: .firstName)
-        }
-
-        if let lastName = traits["lastName"] as? String {
-            appEventsAdapter.setUserData(lastName, forType: .lastName)
-        }
-
-        if let phone = traits["phone"] as? String {
-            appEventsAdapter.setUserData(phone, forType: .phone)
-        }
-
-        if let birthday = traits["birthday"] as? String {
-            appEventsAdapter.setUserData(birthday, forType: .dateOfBirth)
-        }
-
-        if let gender = traits["gender"] as? String {
-            appEventsAdapter.setUserData(gender, forType: .gender)
-        }
+        setUserData(from: traits, mapping: Self.traitUserDataTypes)
 
         // Handle address properties
         if let address = traits["address"] as? [String: Any] {
-            if let city = address["city"] as? String {
-                appEventsAdapter.setUserData(city, forType: .city)
-            }
-
-            if let state = address["state"] as? String {
-                appEventsAdapter.setUserData(state, forType: .state)
-            }
-
-            if let postalCode = address["postalcode"] as? String {
-                appEventsAdapter.setUserData(postalCode, forType: .zip)
-            }
-
-            if let country = address["country"] as? String {
-                appEventsAdapter.setUserData(country, forType: .country)
-            }
+            setUserData(from: address, mapping: Self.addressUserDataTypes)
         }
 
         LoggerAnalytics.debug("FacebookIntegration: Identify event processed successfully with user data")
@@ -149,7 +113,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
         let eventName = payload.event
 
         // FB Event Names must be <= 40 characters
-        let truncatedEvent = String(eventName.prefix(40))
+        let truncatedEvent = String(eventName.prefix(Self.maxEventNameLength))
         let facebookEventName = getFacebookEventName(truncatedEvent)
 
         // Get properties dictionary
@@ -225,7 +189,7 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
 
         // FB Event Names must be <= 40 characters
         // 'Viewed' and 'Screen' with spaces take up 14 characters, so screen name can be max 26
-        let truncatedScreenName = String(screenName.prefix(26))
+        let truncatedScreenName = String(screenName.prefix(Self.maxScreenNameLength))
         let eventName = "Viewed \(truncatedScreenName) Screen"
 
         // Get properties dictionary
@@ -243,6 +207,31 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
 // MARK: - FacebookIntegration Private Methods
 private extension FacebookIntegration {
 
+    /// Facebook event names are limited to 40 characters.
+    static let maxEventNameLength = 40
+    /// "Viewed " and " Screen" take 14 of the 40 characters, so the screen name can be at most 26.
+    static let maxScreenNameLength = 26
+    /// The only non-zero DPO state Facebook accepts (California).
+    static let californiaDpoState = 1000
+
+    /// Identify traits that map to Facebook user data, in the order they are set.
+    static let traitUserDataTypes: [(key: String, type: FBSDKAppEventUserDataType)] = [
+        ("email", .email), ("firstName", .firstName), ("lastName", .lastName),
+        ("phone", .phone), ("birthday", .dateOfBirth), ("gender", .gender)
+    ]
+    /// Address fields that map to Facebook user data, in the order they are set.
+    static let addressUserDataTypes: [(key: String, type: FBSDKAppEventUserDataType)] = [
+        ("city", .city), ("state", .state), ("postalcode", .zip), ("country", .country)
+    ]
+
+    func setUserData(from values: [String: Any], mapping: [(key: String, type: FBSDKAppEventUserDataType)]) {
+        for (key, type) in mapping {
+            if let value = values[key] as? String {
+                appEventsAdapter.setUserData(value, forType: type)
+            }
+        }
+    }
+
     func configureDataProcessingOptions(from destinationConfig: [String: Any], isUpdate: Bool) {
         // Extract configuration from destination config
         let limitedDataUse = destinationConfig["limitedDataUse"] as? Bool ?? false
@@ -250,7 +239,7 @@ private extension FacebookIntegration {
         let dpoCountry = destinationConfig["dpoCountry"] as? Int ?? 0
 
         // Validate DPO state (0 or 1000 only)
-        let validatedDpoState = (dpoState == 0 || dpoState == 1000) ? dpoState : 0
+        let validatedDpoState = (dpoState == 0 || dpoState == Self.californiaDpoState) ? dpoState : 0
 
         // Validate DPO country (0 or 1 only)
         let validatedDpoCountry = (dpoCountry == 0 || dpoCountry == 1) ? dpoCountry : 0
@@ -375,17 +364,17 @@ private extension FacebookIntegration {
         guard let value = properties[key] else { return nil }
 
         switch value {
-        case let n as Int:
-            return Double(n)
+        case let number as Int:
+            return Double(number)
 
-        case let n as Double:
-            return n
+        case let number as Double:
+            return number
 
-        case let n as Float:
-            return Double(n)
+        case let number as Float:
+            return Double(number)
 
-        case let n as NSNumber:
-            return n.doubleValue
+        case let number as NSNumber:
+            return number.doubleValue
 
         case let stringValue as String:
             return Double(stringValue)
@@ -397,10 +386,8 @@ private extension FacebookIntegration {
 
     func extractCurrency(from properties: [String: Any], key: String) -> String {
         // Case-insensitive search for currency key
-        for (propertyKey, value) in properties {
-            if propertyKey.caseInsensitiveCompare(key) == .orderedSame {
-                return String(describing: value)
-            }
+        for (propertyKey, value) in properties where propertyKey.caseInsensitiveCompare(key) == .orderedSame {
+            return String(describing: value)
         }
         return "USD" // Default currency
     }
