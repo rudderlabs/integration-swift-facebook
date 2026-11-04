@@ -1,0 +1,99 @@
+{
+  "copiedFiles": [
+    {
+      "output": "Sources/RudderIntegrationFacebook/FacebookAppEventsAdapter.swift",
+      "source": "Integrations/Facebook/Sources/RudderIntegrationFacebook/FacebookAppEventsAdapter.swift",
+      "transform": "copy"
+    },
+    {
+      "output": "Sources/RudderIntegrationFacebook/FacebookIntegration.swift",
+      "source": "Integrations/Facebook/Sources/RudderIntegrationFacebook/FacebookIntegration.swift",
+      "transform": "copy"
+    },
+    {
+      "output": "Sources/RudderIntegrationFacebook/FacebookSettingsAdapter.swift",
+      "source": "Integrations/Facebook/Sources/RudderIntegrationFacebook/FacebookSettingsAdapter.swift",
+      "transform": "copy"
+    },
+    {
+      "output": "Sources/RudderIntegrationFacebook/ObjCFacebookIntegration.swift",
+      "source": "Integrations/Facebook/Sources/RudderIntegrationFacebook/ObjCFacebookIntegration.swift",
+      "transform": "copy"
+    },
+    {
+      "output": "Sources/RudderIntegrationFacebook/Version.swift",
+      "source": "Integrations/Facebook/Sources/RudderIntegrationFacebook/Version.swift",
+      "transform": "copy"
+    },
+    {
+      "output": "CHANGELOG.md",
+      "source": "Integrations/Facebook/CHANGELOG.md",
+      "transform": "copy"
+    },
+    {
+      "output": "LICENSE",
+      "source": "LICENSE",
+      "transform": "copy"
+    },
+    {
+      "output": "README.md",
+      "source": "Integrations/Facebook/README.md",
+      "transform": "generated"
+    },
+    {
+      "output": ".github/CODEOWNERS",
+      "source": null,
+      "transform": "generated"
+    },
+    {
+      "output": ".gitignore",
+      "source": null,
+      "transform": "generated"
+    },
+    {
+      "output": "CONTRIBUTING.md",
+      "source": null,
+      "transform": "generated"
+    },
+    {
+      "output": "Package.swift",
+      "source": null,
+      "transform": "generated"
+    },
+    {
+      "output": "VERSION",
+      "source": null,
+      "transform": "generated"
+    }
+  ],
+  "fileHashes": {
+    ".github/CODEOWNERS": "b6186d483919a45be6dd29537a58adc1a5a34338ab74fcf6e9985506c18eb025",
+    ".gitignore": "6c3f21e0d020c2a3887f176d7d69e0e6456e31888e053bf9dd5d1c5c78972aeb",
+    "CHANGELOG.md": "e8314160ec45c3ec87bdd15a1d90b7e64c29f3e8aa84e60a1def858aaf87ddf5",
+    "CONTRIBUTING.md": "ce11e0afaa6c4d3ef7826244736aee964b5daa211073d09ea1cad54fd8a1ebda",
+    "LICENSE": "130c075edb106634e90df2eb62cba8f7a3cb2c0e8ccec39cb168fc649684205d",
+    "Package.swift": "9e85be274163dced0032fe524fa3cd8968005301821d54ddf17b233f423c7e44",
+    "README.md": "698a3825e48b39befcdd72ffa74092879f7b55bd9d7f1d10c66eb7863e49e39d",
+    "Sources/RudderIntegrationFacebook/FacebookAppEventsAdapter.swift": "78742ff139210297caa99a7ef079134c384051aa8b52e6cba15db050c728dcba",
+    "Sources/RudderIntegrationFacebook/FacebookIntegration.swift": "c03b433117f3446f22c5cdd17b354c679e80ec001cc241e4379c0052adb2785b",
+    "Sources/RudderIntegrationFacebook/FacebookSettingsAdapter.swift": "4cd3f9bc49acb24821abf881cc2b9136634d24d9272182d8e016f63b5c7c21fb",
+    "Sources/RudderIntegrationFacebook/ObjCFacebookIntegration.swift": "f8a74f95cacdd457f26197eb12079d518285ad50c7db03ed59ff69e5e6dc8f09",
+    "Sources/RudderIntegrationFacebook/Version.swift": "8dd5a5631c4c22ee0f1285be9e35e10f152148eb5d6d01f1e9daf31681dc14ae",
+    "VERSION": "c28fcca53637bc88e124af1725df13cb98c69dedefd62fb3cdbe1cdb6b760624"
+  },
+  "package": "facebook",
+  "policies": {
+    "RudderStackAnalytics": {
+      "mode": "external",
+      "package": "swift-sdk"
+    }
+  },
+  "schemaVersion": 1,
+  "sourceCommit": "7a73e4ad4b42d8271bdc35aba997880208d25b29",
+  "sourceRepository": "rudderlabs/rudder-monorepo-swift",
+  "targetClosure": [
+    "RudderStackAnalytics",
+    "RudderIntegrationFacebook"
+  ],
+  "version": "2.0.0"
+}
