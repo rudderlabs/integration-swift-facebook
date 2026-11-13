@@ -70,6 +70,11 @@ public class FacebookIntegration: IntegrationPlugin, StandardIntegration {
     // MARK: - Optional IntegrationPlugin Methods
 
     public func update(destinationConfig: [String: Any]) throws {
+        // The SDK sends an empty config when the destination is disabled; clearing LDU then would lift a privacy setting.
+        guard !destinationConfig.isEmpty else {
+            LoggerAnalytics.debug("FacebookIntegration: Empty destination config, keeping the current data processing options")
+            return
+        }
         configureDataProcessingOptions(from: destinationConfig, isUpdate: true)
     }
 

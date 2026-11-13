@@ -1,5 +1,12 @@
 # Changelog
 
+## [2.0.2](https://github.com/rudderlabs/rudder-monorepo-swift/compare/integration-facebook-2.0.1...integration-facebook-2.0.2) (2026-11-13)
+
+
+### Bug Fixes
+
+* **facebook:** keep the data processing options on an empty update ([#55](https://github.com/rudderlabs/rudder-monorepo-swift/issues/55)) ([762d2d8](https://github.com/rudderlabs/rudder-monorepo-swift/commit/762d2d89cd156c1bf8dee11630f5c3764ed85a45))
+
 ## [2.0.1](https://github.com/rudderlabs/rudder-monorepo-swift/compare/integration-facebook-2.0.0...integration-facebook-2.0.1) (2026-11-04)
 
 
