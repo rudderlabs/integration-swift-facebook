@@ -69,17 +69,17 @@
   "fileHashes": {
     ".github/CODEOWNERS": "b6186d483919a45be6dd29537a58adc1a5a34338ab74fcf6e9985506c18eb025",
     ".gitignore": "6c3f21e0d020c2a3887f176d7d69e0e6456e31888e053bf9dd5d1c5c78972aeb",
-    "CHANGELOG.md": "9a678d113b91147b81870b6e40c9f1813449ba113eb28b393087960933844cc3",
-    "CONTRIBUTING.md": "ce11e0afaa6c4d3ef7826244736aee964b5daa211073d09ea1cad54fd8a1ebda",
+    "CHANGELOG.md": "fa149510da016c7c592d5fa0e268320b9a0d3e64616427eceadf0931fa4d302c",
+    "CONTRIBUTING.md": "16cc37a206bc8ff87fd01913e4f94e45c254beb5b3b3602e791a8ee0014f87ae",
     "LICENSE": "130c075edb106634e90df2eb62cba8f7a3cb2c0e8ccec39cb168fc649684205d",
-    "Package.swift": "6fccdeaa65c6c85c8085e65c06055f80fd413b2ffcc58c859e746a87af9dd7e9",
-    "README.md": "2d0a7bb6ca9b07c000b8a71b2484d143f3dc570468171055a304e64539fc5006",
+    "Package.swift": "6d6519abd5aba92042c5a0d3b60532efef6f4ecae0f489ef61689f07a30e0b06",
+    "README.md": "770a19fec1ca17fcb3400d34569162fd7793365dd5cb983e0775056f41592d63",
     "Sources/RudderIntegrationFacebook/FacebookAppEventsAdapter.swift": "78742ff139210297caa99a7ef079134c384051aa8b52e6cba15db050c728dcba",
-    "Sources/RudderIntegrationFacebook/FacebookIntegration.swift": "6b42f4254858cde0492312bef040c99758ab500b1dd11711a71312418d4485bd",
+    "Sources/RudderIntegrationFacebook/FacebookIntegration.swift": "199cfc11d431d722bad8db57bd7daf3d4da19ff3192032be2f66c24bbba1f761",
     "Sources/RudderIntegrationFacebook/FacebookSettingsAdapter.swift": "4cd3f9bc49acb24821abf881cc2b9136634d24d9272182d8e016f63b5c7c21fb",
-    "Sources/RudderIntegrationFacebook/ObjCFacebookIntegration.swift": "f8a74f95cacdd457f26197eb12079d518285ad50c7db03ed59ff69e5e6dc8f09",
-    "Sources/RudderIntegrationFacebook/Version.swift": "52b2ede32ec36ca01ea67230a29849819396d4c3ecf8dee3601d65c70d05d81e",
-    "VERSION": "b4b16faea52dc04ccfe32f7b342094855923ebf599a3cac1940470a2d6d7c261"
+    "Sources/RudderIntegrationFacebook/ObjCFacebookIntegration.swift": "54916aeaaa92ddc03759c686414814c7e4d9ac2917be559981f92917e7cc6022",
+    "Sources/RudderIntegrationFacebook/Version.swift": "589a70dc5e32cf3e1485d78f0f2094d63c232492e7000a6447a60b4b4ea18cd3",
+    "VERSION": "2985be8b28d3ade858e8d8fb4bc22f565b1bf6020dff982dce141f7721b9999c"
   },
   "package": "facebook",
   "policies": {
@@ -89,11 +89,11 @@
     }
   },
   "schemaVersion": 1,
-  "sourceCommit": "6dfc33c9a0375ab2abe4079b0b5119263c9e288f",
+  "sourceCommit": "a40b48ce697ee00ffe8b909c4b25be687d0125f5",
   "sourceRepository": "rudderlabs/rudder-monorepo-swift",
   "targetClosure": [
     "RudderStackAnalytics",
     "RudderIntegrationFacebook"
   ],
-  "version": "2.0.2"
+  "version": "3.0.0"
 }
