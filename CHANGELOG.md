@@ -1,5 +1,17 @@
 # Changelog
 
+## [3.0.0](https://github.com/rudderlabs/rudder-monorepo-swift/compare/integration-facebook-2.0.2...integration-facebook-3.0.0) (2026-11-23)
+
+
+### ⚠ BREAKING CHANGES
+
+* **facebook:** require facebook-ios-sdk 19 ([#71](https://github.com/rudderlabs/rudder-monorepo-swift/issues/71))
+
+### Features
+
+* **facebook:** require facebook-ios-sdk 19 ([#71](https://github.com/rudderlabs/rudder-monorepo-swift/issues/71)) ([2adaad3](https://github.com/rudderlabs/rudder-monorepo-swift/commit/2adaad39f547e9e57e185c7c7833c386608c0b26))
+* log integrations through the instance logger ([#74](https://github.com/rudderlabs/rudder-monorepo-swift/issues/74)) ([d00be0c](https://github.com/rudderlabs/rudder-monorepo-swift/commit/d00be0c2e42dcd4677a0f9285ac14e4e137ddef3))
+
 ## [2.0.2](https://github.com/rudderlabs/rudder-monorepo-swift/compare/integration-facebook-2.0.1...integration-facebook-2.0.2) (2026-11-13)
 
 

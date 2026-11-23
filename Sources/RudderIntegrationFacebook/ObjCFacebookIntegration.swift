@@ -44,7 +44,7 @@ public class ObjCFacebookIntegration: NSObject, ObjCIntegrationPlugin, ObjCStand
 
     // MARK: - Private Properties
 
-    private let facebookIntegration: FacebookIntegration
+    let facebookIntegration: FacebookIntegration
 
     // MARK: - Initializers
 
@@ -56,6 +56,12 @@ public class ObjCFacebookIntegration: NSObject, ObjCIntegrationPlugin, ObjCStand
     @objc
     public override init() {
         self.facebookIntegration = FacebookIntegration()
+        super.init()
+    }
+
+    /** Wraps the given integration, for example one with test adapters. */
+    init(facebookIntegration: FacebookIntegration) {
+        self.facebookIntegration = facebookIntegration
         super.init()
     }
 

@@ -78,8 +78,27 @@ let package = Package(
 This integration supports Facebook iOS SDK version:
 
 ```
-18.0.0+
+>=19.0.0, <20.0.0
 ```
+
+### Migrating to 3.0.0
+
+Version 3.0.0 requires Facebook iOS SDK 19 (`>=19.0.0, <20.0.0`), replacing 18.x. Facebook iOS SDK 19 needs an Xcode version with Swift 6.3 or later.
+
+- If your app adds the Facebook SDK itself, change that requirement to 19.x.
+
+Facebook iOS SDK 19 also changes what it sends with your events. Check these points before you upgrade:
+
+- The SDK adds the screen title and the App Link URL to the events it logs. To keep the previous behavior, set `FBSDKAutoLogMetaDataEnabled` to `false` in your `Info.plist`, or turn off "Automatically include more app event details" in Events Manager:
+
+  ```xml
+  <key>FBSDKAutoLogMetaDataEnabled</key>
+  <false/>
+  ```
+
+- If your `Info.plist` sets `FacebookAutoLogAppEventsEnabled` to `false`, automatic app event logging is now off, even when Events Manager turns it on.
+
+See the [Facebook iOS SDK 19.0.0 changelog](https://github.com/facebook/facebook-ios-sdk/blob/v19.0.0/CHANGELOG.md#1900).
 
 ### Platform Support
 
@@ -135,4 +154,4 @@ For more information:
 
 ## Report issues / contribute
 
-This repository only publishes releases; it does not accept pull requests. To report a bug or request a feature, [open an issue](https://github.com/rudderlabs/integration-swift-facebook/issues). See [CONTRIBUTING.md](CONTRIBUTING.md).
+This repository is read-only: it only publishes releases of this package from [rudder-monorepo-swift](https://github.com/rudderlabs/rudder-monorepo-swift). It does not accept issues or pull requests. To report a bug or request a feature, [open an issue in rudder-monorepo-swift](https://github.com/rudderlabs/rudder-monorepo-swift/issues/new/choose). See [CONTRIBUTING.md](CONTRIBUTING.md).
